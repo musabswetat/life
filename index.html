@@ -54,7 +54,7 @@
         @media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100vh; padding-top: 20px; box-shadow: -5px 0 25px rgba(0,0,0,0.1); border-left: none; align-items: flex-start; z-index: 105;} .sidebar.open { right: 0; } .sidebar button { width: 100%; border-radius: 0; padding: 16px 25px; font-size: 16px; } .sidebar button span.text { opacity: 1; display: inline;} .sidebar-overlay { display: block; pointer-events: none; } .sidebar-overlay.show { opacity: 1; pointer-events: auto; } .main-content { padding: 20px 15px 110px 15px; } }
         @media (min-width: 769px) { .app-footer { padding-right: 105px; } .footer-icon-btn[onclick="toggleMobileMenu()"] { display: none; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        #syncStatus { position: fixed; top: 15px; left: 15px; background: rgba(0,0,0,0.8); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; z-index: 9999; display: flex; align-items: center; gap: 5px; opacity: 0; transition: 0.3s; font-weight:bold;}
+        #syncStatus { position: fixed; top: 15px; left: 15px; background: rgba(0,0,0,0.8); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; z-index: 9999; display: flex; align-items: center; gap: 5px; opacity: 0; transition: 0.3s; font-weight:bold; pointer-events:none;}
         #syncStatus.show { opacity: 1; }
     </style>
 </head>
@@ -200,8 +200,7 @@
     </div>
 
     <script>
-        // --- 0. إعدادات Firebase ☁️ المحدثة ---
-        // ✅ تم إضافة الرابط الأوروبي الصحيح هنا
+        // --- 0. إعدادات Firebase ☁️ ---
         const firebaseConfig = {
             apiKey: "AIzaSyCXalyz_Xa7IeSuT8enh6MCu2alH5HvBMY",
             authDomain: "life-8892e.firebaseapp.com",
@@ -216,25 +215,20 @@
         const database = firebase.database();
         const dbRef = database.ref('myLifeData');
 
-        // --- 🟢 مراقبة حالة الاتصال الحقيقية لعرضها في الإعدادات ---
+        // حالة الاتصال للواجهة
         const connectedRef = firebase.database().ref(".info/connected");
         connectedRef.on("value", (snap) => {
             const statusEl = document.getElementById('cloudStatusText');
             if (snap.val() === true) {
-                if(statusEl) {
-                    statusEl.innerText = "🟢 متصل ومحمي (مزامنة لحظية نشطة)";
-                    statusEl.style.color = "var(--success)";
-                }
+                if(statusEl) { statusEl.innerText = "🟢 متصل ومحمي (مزامنة لحظية نشطة)"; statusEl.style.color = "var(--success)"; }
             } else {
-                if(statusEl) {
-                    statusEl.innerText = "🔴 غير متصل بالسحابة (يتم الحفظ محلياً فقط)";
-                    statusEl.style.color = "var(--danger)";
-                }
+                if(statusEl) { statusEl.innerText = "🔴 غير متصل بالسحابة (يتم الحفظ محلياً فقط)"; statusEl.style.color = "var(--danger)"; }
             }
         });
 
         // --- 1. قاعدة البيانات المحلية ---
         let db = JSON.parse(localStorage.getItem('myLifeAppDB')) || {};
+        // استرجاع القوائم في حال كانت مفقودة لضمان عدم حدوث Crash
         if (!db.fixed_bills) db.fixed_bills = []; if (!db.subscriptions) db.subscriptions = [];
         if (!db.purchases) db.purchases = []; if (!db.vault) db.vault = [];
         if (!db.notes) db.notes = []; if (!db.documents) db.documents = []; 
@@ -244,39 +238,45 @@
         const todayStr = new Date().toISOString().split('T')[0];
         ['billDate', 'subDate', 'purDate', 'vaultDate', 'docExpiry'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = todayStr; });
 
-        // --- ☁️ محرك المزامنة اللحظية ---
-        let isSyncing = false;
+        // --- ☁️ محرك المزامنة اللحظية (مطور ومحلول مشاكله) ---
         function showSyncStatus(msg, isError = false) {
             const el = document.getElementById('syncStatus'); el.innerText = msg;
             el.style.background = isError ? 'rgba(239, 68, 68, 0.9)' : 'rgba(16, 185, 129, 0.9)';
-            el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2500);
+            el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2000);
         }
 
+        // تم إزالة isSyncing lock ليسمح لك بإضافة مهام سريعة متتالية دون أن يتم تجاهل أي منها
         function saveToCloud() {
-            if(isSyncing) return;
-            isSyncing = true;
             showSyncStatus('☁️ جاري الحفظ...');
-            dbRef.set(db).then(() => { showSyncStatus('✅ محفوظ سحابياً'); isSyncing = false; })
-                .catch(err => { showSyncStatus('❌ فشل الاتصال', true); isSyncing = false; });
+            dbRef.set(db).then(() => { showSyncStatus('✅ محفوظ سحابياً'); })
+                .catch(err => { showSyncStatus('❌ فشل الاتصال', true); });
         }
 
-        // استماع للتغييرات في السحابة
+        // الاستماع للتغييرات من أجهزة أخرى
         dbRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data && JSON.stringify(data) !== JSON.stringify(db)) {
                 db = data;
+                
+                // الحل السحري: إعادة تعريف القوائم الفارغة التي قد يحذفها Firebase تلقائياً لتجنب الـ Crash
+                if (!db.fixed_bills) db.fixed_bills = []; if (!db.subscriptions) db.subscriptions = [];
+                if (!db.purchases) db.purchases = []; if (!db.vault) db.vault = [];
+                if (!db.notes) db.notes = []; if (!db.documents) db.documents = []; 
+                if (!db.todos) db.todos = []; if (!db.expenses) db.expenses = []; 
+                if (!db.settings) db.settings = { darkMode: false };
+
                 localStorage.setItem('myLifeAppDB', JSON.stringify(db));
                 cleanupOldData();
                 updateDashboardZen();
                 if(document.getElementById('fullTodosContainer').innerHTML !== '') renderFullTodos(); 
                 if(document.getElementById('fullExpensesArchive').innerHTML !== '') renderExpenseStats(); 
                 if(document.getElementById('notesContainer')) renderNotes();
-                showSyncStatus('🔄 تم التحديث من جهاز آخر');
+                showSyncStatus('🔄 تم التحديث');
             }
         });
 
         function cleanupOldData() {
-            const now = new Date(); let changed = false;
+            const now = new Date();
             db.expenses = db.expenses.filter(ex => { return ((now - new Date(ex.date)) / (1000 * 60 * 60 * 24)) <= 120; });
             db.todos = db.todos.filter(t => { return ((now - new Date(t.date)) / (1000 * 60 * 60 * 24)) <= 30; });
             localStorage.setItem('myLifeAppDB', JSON.stringify(db));
@@ -303,7 +303,7 @@
         function toggleTheme() { db.settings.darkMode = !db.settings.darkMode; localStorage.setItem('myLifeAppDB', JSON.stringify(db)); applyTheme(); saveToCloud(); }
         applyTheme();
 
-        // --- العمليات ---
+        // --- العمليات الرئيسية ---
         function updateDashboardZen() {
             let spentThisMonth = 0; const cMonth = new Date().getMonth(); const cYear = new Date().getFullYear();
             db.fixed_bills.forEach(b => { let d = new Date(b.date); if(d.getMonth() === cMonth && d.getFullYear() === cYear) spentThisMonth += parseFloat(b.amount); });
@@ -333,6 +333,17 @@
             renderDashTodos(); renderDashExpenses(); 
         }
 
+        // دالة الحفظ التي تجمع التحديث المحلي والسحابي معاً
+        function finalizeAction(msg=null) { 
+            localStorage.setItem('myLifeAppDB', JSON.stringify(db)); 
+            saveToCloud(); 
+            if(msg) alert(msg); 
+            updateDashboardZen(); 
+            if(document.getElementById('fullTodosContainer').innerHTML !== '') renderFullTodos(); 
+            if(document.getElementById('fullExpensesArchive').innerHTML !== '') renderExpenseStats(); 
+            if(document.getElementById('notesContainer')) renderNotes(); 
+        }
+
         function addTodoDash(e) { e.preventDefault(); db.todos.push({ id: Date.now(), text: document.getElementById('todoInputDash').value, done: false, date: todayStr }); finalizeAction(); document.getElementById('todoInputDash').value=''; }
         function toggleTodo(id) { const t = db.todos.find(x => x.id === id); if(t) { t.done = !t.done; finalizeAction(); } }
         function deleteTodo(id) { db.todos = db.todos.filter(x => x.id !== id); finalizeAction(); }
@@ -344,8 +355,6 @@
         function renderDashExpenses() { const c = document.getElementById('dashExpensesList'); if(!c) return; c.innerHTML = ''; let expensesToRender = db.expenses.filter(t => t.date === todayStr); let total = 0; expensesToRender.forEach(ex => { total += parseFloat(ex.amount); c.innerHTML += `<div style="display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px;"><div style="flex:1;"><strong>${ex.desc}</strong></div><div style="font-weight:bold; color:var(--danger);">${ex.amount} ₪</div><button onclick="deleteExpense(${ex.id})" style="background:none; border:none; color:var(--text-light); cursor:pointer; padding-right:15px; font-size:16px;">✖</button></div>`; }); if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light); font-size:13px; padding-top:10px;">لم تسجل مصاريف اليوم.</p>'; const totalEl = document.getElementById('dashExpensesTotal'); if(totalEl) totalEl.innerText = `${total} شيكل`; }
         function renderExpenseStats() { let tDay = 0, tWeek = 0, tMonth = 0; const now = new Date(); const currentMonth = now.getMonth(); const currentYear = now.getFullYear(); db.expenses.forEach(ex => { const exDate = new Date(ex.date); const diffDays = (now - exDate) / (1000 * 60 * 60 * 24); if(ex.date === todayStr) tDay += parseFloat(ex.amount); if(diffDays <= 7) tWeek += parseFloat(ex.amount); if(exDate.getMonth() === currentMonth && exDate.getFullYear() === currentYear) tMonth += parseFloat(ex.amount); }); document.getElementById('statToday').innerText = tDay + ' ₪'; document.getElementById('statWeek').innerText = tWeek + ' ₪'; document.getElementById('statMonth').innerText = tMonth + ' ₪'; const c = document.getElementById('fullExpensesArchive'); c.innerHTML = ''; const grouped = {}; db.expenses.forEach(ex => { if(!grouped[ex.date]) grouped[ex.date] = []; grouped[ex.date].push(ex); }); const sortedDates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a)); sortedDates.forEach(date => { let dateLabel = date === todayStr ? 'اليوم' : new Date(date).toLocaleDateString('ar-EG'); let dayTotal = grouped[date].reduce((sum, item) => sum + parseFloat(item.amount), 0); let html = `<div class="date-group-header">📅 ${dateLabel} <span style="margin-right:10px; color:var(--danger);">(${dayTotal} ₪)</span></div>`; grouped[date].forEach(ex => { html += `<div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid var(--border); background:var(--input-bg); border-radius:10px; margin-bottom:8px;"><div style="font-weight:bold;">${ex.desc}</div><div style="display:flex; gap:15px; align-items:center;"><span style="color:var(--danger); font-weight:bold;">${ex.amount} ₪</span><button onclick="deleteExpense(${ex.id})" style="background:none; border:none; color:var(--text-light); cursor:pointer;">✖</button></div></div>`; }); c.innerHTML += html; }); if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light);">الأرشيف فارغ.</p>'; }
 
-        function finalizeAction(msg=null) { localStorage.setItem('myLifeAppDB', JSON.stringify(db)); saveToCloud(); if(msg) alert(msg); updateDashboardZen(); if(document.getElementById('fullTodosContainer').innerHTML !== '') renderFullTodos(); if(document.getElementById('fullExpensesArchive').innerHTML !== '') renderExpenseStats(); if(document.getElementById('notesContainer')) renderNotes(); }
-        
         function toggleFields() { const type = document.getElementById('billType').value; document.getElementById('meterGroup').style.display = type === 'كهرباء' ? 'block' : 'none'; document.getElementById('titleGroup').style.display = type !== 'كهرباء' ? 'block' : 'none'; }
         function toggleVaultFields() { const type = document.getElementById('vaultType').value; document.getElementById('vaultNameLabel').innerText = type === 'إيميل' ? 'الإيميل:' : 'اسم الحساب:'; document.getElementById('vaultPlatformGroup').style.display = type === 'إيميل' ? 'none' : 'block'; document.getElementById('vaultNotesGroup').style.display = type === 'إيميل' ? 'block' : 'none'; }
         
@@ -383,7 +392,7 @@
         function editItem(collection, id) { const item = db[collection].find(i => i.id === id); if(!item) return; db[collection] = db[collection].filter(i => i.id !== id); if(collection==='documents'){ showSection('documents'); document.getElementById('docName').value=item.name; document.getElementById('docExpiry').value=item.expiryDate; } if(collection === 'fixed_bills') { showSection('fixed-bills'); document.getElementById('billType').value = item.type; toggleFields(); document.getElementById('billAmount').value = item.amount; document.getElementById('billDate').value = item.date; } if(collection === 'subscriptions') { showSection('subscriptions'); document.getElementById('subName').value = item.name; document.getElementById('subAmount').value = item.amount; document.getElementById('subDate').value = item.startDate; document.getElementById('subDuration').value = item.durationMonths; } if(collection === 'purchases') { showSection('purchases'); document.getElementById('purName').value = item.name; document.getElementById('purAmount').value = item.amount; document.getElementById('purDate').value = item.date; document.getElementById('purWarranty').value = item.warrantyMonths; } if(collection === 'vault') { showSection('vault'); document.getElementById('vaultType').value = item.type; toggleVaultFields(); document.getElementById('vaultName').value = item.accountName; document.getElementById('vaultPassword').value = item.password; document.getElementById('vaultDate').value = item.date; } }
         
         function exportData() { const dl = document.createElement('a'); dl.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db))); dl.setAttribute("download", `MyERP_Backup.json`); document.body.appendChild(dl); dl.click(); dl.remove(); }
-        function importData() { const f = document.getElementById('importFile').files[0]; if(!f) return alert('اختر ملفاً'); const r = new FileReader(); r.onload = function(e) { try { db = JSON.parse(e.target.result); finalizeAction('تم الاسترجاع!'); location.reload(); } catch(err) { alert('❌ ملف تالف.'); } }; r.readAsText(f); }
+        function importData() { const f = document.getElementById('importFile').files[0]; if(!f) return alert('اختر ملفاً'); const r = new FileReader(); r.onload = function(e) { try { db = JSON.parse(e.target.result); finalizeAction('تم الاسترجاع بنجاح!'); location.reload(); } catch(err) { alert('❌ ملف تالف.'); } }; r.readAsText(f); }
         function copyDataToClipboard() { navigator.clipboard.writeText(JSON.stringify(db)).then(() => { alert("✅ تم نسخ جميع بياناتك كنص بنجاح!"); }).catch(err => { alert("❌ فشل النسخ."); }); }
         function requestNotificationPermission() { if (!("Notification" in window)) { alert("متصفحك لا يدعم الإشعارات."); return; } Notification.requestPermission().then(function (permission) { if (permission === "granted") { alert("✅ تم تفعيل الإشعارات بنجاح!"); new Notification("Zen OS", { body: "الإشعارات تعمل بشكل ممتاز" }); } else { alert("❌ تم رفض الصلاحية."); } }); }
 
