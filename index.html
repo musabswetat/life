@@ -2,15 +2,15 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <!-- 📱 إعدادات الشاشة الكاملة وألوان أشرطة النظام -->
+    <!-- 📱 إعدادات الشاشة الكاملة ونظام Edge-to-Edge -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="theme-color" content="#f8fafc" id="themeColorMeta">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#ffffff" id="themeColorMeta">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2313/2313436.png">
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Zen%20OS%22%2C%22short_name%22%3A%22Zen%20OS%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%2F%22%2C%22background_color%22%3A%22%23f8fafc%22%2C%22theme_color%22%3A%22%23f8fafc%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2313%2F2313436.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D'>
+    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Zen%20OS%22%2C%22short_name%22%3A%22Zen%20OS%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%2F%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%23ffffff%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2313%2F2313436.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D'>
 
     <title>نظام الإدارة الشخصي (Zen OS)</title>
     
@@ -59,7 +59,6 @@
             transition: background-color 0.3s, color 0.3s; 
         }
         
-        /* الهيكل الرئيسي الذي يقضي على أي فراغات */
         .app-layout {
             flex: 1;
             display: flex;
@@ -69,6 +68,7 @@
             overflow: hidden;
             position: relative;
             min-width: 0;
+            background-color: var(--bg);
         }
 
         .sidebar-overlay { 
@@ -182,13 +182,13 @@
         }
         .dash-input:focus { box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3); }
 
-        /* 🚀 الفوتر المدمج مباشرة بالهيكل بدون انفصال */
+        /* 🚀 الفوتر الملتصق بالأسفل تماماً مع معالجة شريط الإيماءات */
         .app-footer { 
             flex-shrink: 0;
             width: 100%; 
             background: var(--card); 
             border-top: 1px solid var(--border); 
-            padding: 12px 15px; 
+            padding: 10px 15px calc(10px + env(safe-area-inset-bottom, 0px)) 15px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
@@ -354,7 +354,7 @@
             .sidebar button span.text { opacity: 1; display: inline;} 
             .sidebar-overlay { display: block; pointer-events: none; } 
             .sidebar-overlay.show { opacity: 1; pointer-events: auto; } 
-            .main-content { padding: 20px 15px 20px 15px; } 
+            .main-content { padding: 20px 15px; } 
             .card { padding: 15px; margin-bottom: 15px; border-radius: 16px; } 
             .dashboard-header { font-size: 22px; }
             .dashboard-grid { grid-template-columns: 1fr; width: 100%; display: flex; flex-direction: column; } 
@@ -768,7 +768,7 @@
         function applyTheme() { 
             document.body.classList.toggle('dark-mode', db.settings.darkMode); 
             document.getElementById('themeIconDesktop').innerText = db.settings.darkMode ? '☀️' : '🌙'; 
-            const color = db.settings.darkMode ? '#0f172a' : '#f8fafc';
+            const color = db.settings.darkMode ? '#1e293b' : '#ffffff';
             document.getElementById('themeColorMeta').setAttribute('content', color);
         }
 
@@ -1077,4 +1077,3 @@
     </script>
 </body>
 </html>
- 
