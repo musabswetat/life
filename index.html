@@ -2,15 +2,15 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- 📱 إعدادات الشاشة الكاملة (PWA) -->
+    <!-- 📱 إعدادات الشاشة الكاملة وألوان أشرطة النظام -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#f8fafc" id="themeColorMeta">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2313/2313436.png">
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Zen%20OS%22%2C%22short_name%22%3A%22Zen%20OS%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%2F%22%2C%22background_color%22%3A%22%23f8fafc%22%2C%22theme_color%22%3A%22%236366f1%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2313%2F2313436.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D'>
+    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Zen%20OS%22%2C%22short_name%22%3A%22Zen%20OS%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%2F%22%2C%22background_color%22%3A%22%23f8fafc%22%2C%22theme_color%22%3A%22%23f8fafc%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2313%2F2313436.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D'>
 
     <title>نظام الإدارة الشخصي (Zen OS)</title>
     
@@ -48,16 +48,29 @@
         html, body { 
             width: 100%; 
             height: 100%; 
+            height: 100dvh;
             overflow: hidden; 
             background-color: var(--bg) !important; 
             color: var(--text) !important; 
         }
         body { 
             display: flex; 
-            flex-direction: column; 
+            flex-direction: row; 
             transition: background-color 0.3s, color 0.3s; 
         }
         
+        /* الهيكل الرئيسي الذي يقضي على أي فراغات */
+        .app-layout {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            height: 100dvh;
+            overflow: hidden;
+            position: relative;
+            min-width: 0;
+        }
+
         .sidebar-overlay { 
             display: none; 
             position: fixed; 
@@ -83,6 +96,7 @@
             z-index: 105; 
             transition: all 0.3s ease; 
             overflow-x: hidden;
+            flex-shrink: 0;
         }
         .sidebar:hover { width: 240px; }
         .sidebar button { 
@@ -118,7 +132,6 @@
             scroll-behavior: smooth; 
             position: relative; 
             width: 100%; 
-            padding-bottom: 85px; 
             box-sizing: border-box; 
         }
         .section { display: none; animation: fadeIn 0.3s ease-out; width: 100%; }
@@ -169,17 +182,17 @@
         }
         .dash-input:focus { box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3); }
 
+        /* 🚀 الفوتر المدمج مباشرة بالهيكل بدون انفصال */
         .app-footer { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
+            flex-shrink: 0;
             width: 100%; 
             background: var(--card); 
             border-top: 1px solid var(--border); 
-            padding: 10px 15px; 
+            padding: 12px 15px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
+            position: relative;
             z-index: 100; 
             box-shadow: 0 -4px 15px rgba(0,0,0,0.03); 
             gap: 10px; 
@@ -264,7 +277,6 @@
 
         @media screen and (max-height: 500px) { 
             .app-footer { display: none !important; } 
-            .main-content { padding-bottom: 20px; }
         }
         
         .form-group { margin-bottom: 18px; width: 100%; } 
@@ -322,14 +334,15 @@
         } 
         .list-item:last-child { border-bottom: none; }
         
+        /* 📱 تخصيصات الشاشات الصغيرة */
         @media (max-width: 768px) { 
-            body, html { overflow-x: hidden; width: 100%; } 
             .sidebar { 
                 position: fixed; 
                 top: 0; 
                 right: -280px; 
                 width: 280px; 
                 height: 100vh; 
+                height: 100dvh;
                 padding-top: 20px; 
                 box-shadow: -5px 0 25px rgba(0,0,0,0.1); 
                 border-left: none; 
@@ -341,15 +354,14 @@
             .sidebar button span.text { opacity: 1; display: inline;} 
             .sidebar-overlay { display: block; pointer-events: none; } 
             .sidebar-overlay.show { opacity: 1; pointer-events: auto; } 
-            .main-content { padding: 20px 15px 85px 15px; width: 100%; overflow-x: hidden; box-sizing: border-box; } 
-            .card { padding: 15px; margin-bottom: 15px; border-radius: 16px; width: 100%; box-sizing: border-box; overflow: hidden; } 
+            .main-content { padding: 20px 15px 20px 15px; } 
+            .card { padding: 15px; margin-bottom: 15px; border-radius: 16px; } 
             .dashboard-header { font-size: 22px; }
             .dashboard-grid { grid-template-columns: 1fr; width: 100%; display: flex; flex-direction: column; } 
             .dash-form { flex-direction: column; } 
             .summary-card { flex-direction: column; align-items: flex-start; }
         }
         @media (min-width: 769px) { 
-            .app-footer { padding-right: 105px; } 
             .footer-icon-btn[onclick="toggleMobileMenu()"] { display: none; } 
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -398,195 +410,200 @@
         </div>
     </div>
 
-    <!-- 🚀 الفوتر المتكامل -->
-    <div class="app-footer">
-        <button class="footer-icon-btn" onclick="toggleMobileMenu()">☰</button>
-        <div class="footer-action-wrapper">
-            <div class="footer-menu" id="footerMenu">
-                <button class="footer-item" onclick="handleFooterAction('fixed-bills')">📄 إضافة فاتورة</button>
-                <button class="footer-item" onclick="handleFooterAction('subscriptions')">🔁 اشتراك جديد</button>
-                <button class="footer-item" onclick="handleFooterAction('purchases')">🛒 تسجيل منتج</button>
-                <button class="footer-item" onclick="handleFooterAction('notes')">📝 ملاحظة سريعة</button>
-            </div>
-            <button class="footer-action-btn" id="footerBtn" onclick="toggleFooter()">
-                <span id="footerIcon">➕</span> <span id="footerText">الإضافة السريعة</span>
-            </button>
-        </div>
-        <button class="footer-icon-btn" id="footerBackBtn" onclick="history.back()">🔙</button>
-    </div>
+    <!-- 📱 حاوية التطبيق الرئيسية -->
+    <div class="app-layout">
 
-    <div class="main-content">
-        
-        <!-- 🍃 الرئيسية -->
-        <div id="dashboard" class="section active">
-            <div class="dashboard-header">طاب يومك.</div>
-            <div class="dashboard-subtitle">بياناتك آمنة ومتزامنة لحظياً عبر أجهزتك ☁️</div>
+        <div class="main-content">
+            
+            <!-- 🍃 الرئيسية -->
+            <div id="dashboard" class="section active">
+                <div class="dashboard-header">طاب يومك.</div>
+                <div class="dashboard-subtitle">بياناتك آمنة ومتزامنة لحظياً عبر أجهزتك ☁️</div>
 
-            <div class="card summary-card">
-                <div style="width: 100%;">
-                    <div style="color: var(--text-light); font-size: 14px; margin-bottom: 5px;">دُفِعَ هذا الشهر (فواتير، اشتراكات، مصروفات)</div>
-                    <div style="font-size: 32px; font-weight: bold; color: var(--text);" id="dashSpent">0 <span style="font-size:16px; color:var(--text-light); font-weight:normal;">شيكل</span></div>
-                </div>
-                <div id="dashAlerts" style="font-size: 13px; width: 100%;"></div>
-            </div>
-
-            <div class="dashboard-grid">
-                <!-- المهام -->
-                <div class="card" style="margin-bottom: 0;">
-                    <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--text);">✅ مهام اليوم</h3>
-                    <form onsubmit="addTodoDash(event)" class="dash-form">
-                        <input type="text" id="todoInputDash" placeholder="أضف مهمة للقيام بها اليوم..." required class="dash-input">
-                        <button type="submit" style="display:none;"></button>
-                    </form>
-                    <div id="dashTodosList" style="max-height: 180px; overflow-y: auto; width: 100%;"></div>
-                </div>
-
-                <!-- المصروفات اليومية -->
-                <div class="card" style="margin-bottom: 0;">
-                    <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--text);">💸 مصروفات اليوم</h3>
-                    <form onsubmit="addExpenseDash(event)" class="dash-form">
-                        <input type="text" id="expenseDescDash" placeholder="ماذا اشتريت؟" required class="dash-input">
-                        <input type="number" id="expenseAmountDash" placeholder="المبلغ" required class="dash-input">
-                        <button type="submit" style="display:none;"></button> 
-                    </form>
-                    <div id="dashExpensesList" style="max-height: 120px; overflow-y: auto; width: 100%;"></div>
-                    <div style="margin-top:15px; padding-top:10px; border-top:1px dashed var(--border); display:flex; justify-content:space-between; font-size:14px; font-weight:bold; color:var(--text); width: 100%;">
-                        <span>صرف اليوم:</span> <span id="dashExpensesTotal" style="color:var(--danger);">0 شيكل</span>
+                <div class="card summary-card">
+                    <div style="width: 100%;">
+                        <div style="color: var(--text-light); font-size: 14px; margin-bottom: 5px;">دُفِعَ هذا الشهر (فواتير، اشتراكات، مصروفات)</div>
+                        <div style="font-size: 32px; font-weight: bold; color: var(--text);" id="dashSpent">0 <span style="font-size:16px; color:var(--text-light); font-weight:normal;">شيكل</span></div>
                     </div>
+                    <div id="dashAlerts" style="font-size: 13px; width: 100%;"></div>
                 </div>
 
-                <!-- الاشتراكات الفعالة -->
-                <div class="card" style="margin-bottom: 0;">
-                    <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--primary);">🔁 الاشتراكات الفعالة</h3>
-                    <div id="dashActiveSubs" style="width: 100%;"></div>
-                </div>
-            </div>
-        </div>
+                <div class="dashboard-grid">
+                    <!-- المهام -->
+                    <div class="card" style="margin-bottom: 0;">
+                        <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--text);">✅ مهام اليوم</h3>
+                        <form onsubmit="addTodoDash(event)" class="dash-form">
+                            <input type="text" id="todoInputDash" placeholder="أضف مهمة للقيام بها اليوم..." required class="dash-input">
+                            <button type="submit" style="display:none;"></button>
+                        </form>
+                        <div id="dashTodosList" style="max-height: 180px; overflow-y: auto; width: 100%;"></div>
+                    </div>
 
-        <!-- 📊 الإحصائيات -->
-        <div id="expenses-stats" class="section">
-            <h2 style="margin-bottom: 20px;">📊 إحصائيات وأرشيف المصاريف</h2>
-            <div class="dashboard-grid" style="margin-bottom: 25px;">
-                <div class="card" style="margin-bottom:0; text-align:center; padding:15px;"><div style="font-size:13px; color:var(--text-light);">صرف اليوم</div><div style="font-size:24px; font-weight:bold; color:var(--text);" id="statToday">0</div></div>
-                <div class="card" style="margin-bottom:0; text-align:center; padding:15px;"><div style="font-size:13px; color:var(--text-light);">صرف آخر 7 أيام</div><div style="font-size:24px; font-weight:bold; color:var(--warning);" id="statWeek">0</div></div>
-                <div class="card" style="margin-bottom:0; text-align:center; padding:15px;"><div style="font-size:13px; color:var(--text-light);">صرف هذا الشهر</div><div style="font-size:24px; font-weight:bold; color:var(--danger);" id="statMonth">0</div></div>
-            </div>
-            <div class="card"><h3>أرشيف المصروفات (مرتب حسب التاريخ)</h3><div id="fullExpensesArchive" style="margin-top: 15px; width: 100%;"></div></div>
-        </div>
+                    <!-- المصروفات اليومية -->
+                    <div class="card" style="margin-bottom: 0;">
+                        <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--text);">💸 مصروفات اليوم</h3>
+                        <form onsubmit="addExpenseDash(event)" class="dash-form">
+                            <input type="text" id="expenseDescDash" placeholder="ماذا اشتريت؟" required class="dash-input">
+                            <input type="number" id="expenseAmountDash" placeholder="المبلغ" required class="dash-input">
+                            <button type="submit" style="display:none;"></button> 
+                        </form>
+                        <div id="dashExpensesList" style="max-height: 120px; overflow-y: auto; width: 100%;"></div>
+                        <div style="margin-top:15px; padding-top:10px; border-top:1px dashed var(--border); display:flex; justify-content:space-between; font-size:14px; font-weight:bold; color:var(--text); width: 100%;">
+                            <span>صرف اليوم:</span> <span id="dashExpensesTotal" style="color:var(--danger);">0 شيكل</span>
+                        </div>
+                    </div>
 
-        <!-- ✅ المهام (أرشيف) -->
-        <div id="todos" class="section card"><h2>✅ أرشيف المهام</h2><div id="fullTodosContainer" style="width: 100%;"></div></div>
-
-        <!-- الأقسام العادية -->
-        <div id="fixed-bills" class="section card">
-            <form onsubmit="saveFixedBill(event)">
-                <h2>إضافة فاتورة</h2><br>
-                <div class="form-group"><label>النوع:</label><select id="billType" onchange="toggleFields()"><option value="كهرباء">كهرباء</option><option value="ماء">ماء</option><option value="إنترنت">إنترنت</option></select></div>
-                <div class="form-group" id="meterGroup"><label>رقم العداد:</label><input type="text" id="meterNumber"></div>
-                <div class="form-group" id="titleGroup" style="display: none;"><label>عنوان اختياري:</label><input type="text" id="optionalTitle"></div>
-                <div class="form-group"><label>المبلغ:</label><input type="number" id="billAmount" required></div>
-                <div class="form-group"><label>التاريخ:</label><input type="date" id="billDate" required></div>
-                <button type="submit" class="btn-submit">حفظ الفاتورة</button>
-            </form>
-        </div>
-        
-        <div id="subscriptions" class="section card">
-            <form onsubmit="saveSubscription(event)">
-                <h2>إضافة اشتراك</h2><br>
-                <div class="form-group"><label>الاسم:</label><input type="text" id="subName" required></div>
-                <div class="form-group"><label>المبلغ:</label><input type="number" id="subAmount" required></div>
-                <div class="form-group"><label>تاريخ البدء:</label><input type="date" id="subDate" required></div>
-                <div class="form-group"><label>المدة:</label><select id="subDuration"><option value="1">شهر</option><option value="3">3 أشهر</option><option value="6">6 أشهر</option><option value="12">سنة</option></select></div>
-                <button type="submit" class="btn-submit">حفظ الاشتراك</button>
-            </form>
-        </div>
-        
-        <div id="purchases" class="section card">
-            <form onsubmit="savePurchase(event)">
-                <h2>إضافة مشتريات وضمان</h2><br>
-                <div class="form-group"><label>المنتج:</label><input type="text" id="purName" required></div>
-                <div class="form-group"><label>السعر:</label><input type="number" id="purAmount" required></div>
-                <div class="form-group"><label>التاريخ:</label><input type="date" id="purDate" required></div>
-                <div class="form-group"><label>الضمان (أشهر):</label><input type="number" id="purWarranty" required value="12"></div>
-                <button type="submit" class="btn-submit">حفظ المنتج</button>
-            </form>
-        </div>
-        
-        <div id="notes" class="section card">
-            <h2>الملاحظات</h2><br>
-            <form onsubmit="saveNote(event)">
-                <div class="form-group"><input type="text" id="noteTitle" placeholder="العنوان" style="font-weight:bold; border:none; background:transparent; font-size:18px;"></div>
-                <div class="form-group"><textarea id="noteBody" rows="4" placeholder="المحتوى..." required style="border:none; resize:none; background:transparent;"></textarea></div>
-                <button type="submit" class="btn-submit">حفظ الملاحظة</button>
-            </form>
-            <div id="notesContainer" style="margin-top:20px; display:grid; gap:15px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); width: 100%;"></div>
-        </div>
-        
-        <div id="documents" class="section card">
-            <h2>الوثائق الرسمية</h2><br>
-            <form onsubmit="saveDocument(event)">
-                <div class="form-group"><label>الوثيقة:</label><input type="text" id="docName" required></div>
-                <div class="form-group"><label>انتهاء الصلاحية:</label><input type="date" id="docExpiry" required></div>
-                <button type="submit" class="btn-submit">حفظ</button>
-            </form>
-        </div>
-        
-        <div id="vault" class="section card">
-            <h2>الخزنة (الحسابات)</h2><br>
-            <form onsubmit="saveVaultItem(event)">
-                <div class="form-group"><label>النوع:</label><select id="vaultType" onchange="toggleVaultFields()"><option value="إيميل">إيميل</option><option value="حساب">حساب موقع</option></select></div>
-                <div class="form-group"><label id="vaultNameLabel">الإيميل:</label><input type="text" id="vaultName" required></div>
-                <div class="form-group" id="vaultPlatformGroup" style="display:none;"><label>الموقع:</label><input type="text" id="vaultPlatform"></div>
-                <div class="form-group"><label>كلمة المرور:</label><input type="text" id="vaultPassword" required></div>
-                <div class="form-group" id="vaultNotesGroup"><label>ملاحظات:</label><input type="text" id="vaultNotes"></div>
-                <div class="form-group"><label>التاريخ:</label><input type="date" id="vaultDate" required></div>
-                <button type="submit" class="btn-submit">حفظ آمن</button>
-            </form>
-        </div>
-
-        <!-- ⚙️ قسم الأمان والإعدادات -->
-        <div id="settings" class="section">
-            <div class="card" style="border: 2px solid var(--border);">
-                <h2>☁️ حالة السحابة (Firebase)</h2>
-                <p id="cloudStatusText" style="font-weight:bold; color:var(--warning); margin-top:10px; padding: 10px; border-radius: 10px; background: var(--input-bg);">⏳ جاري الاتصال بالسحابة...</p>
-            </div>
-
-            <div class="card">
-                <h2>🛡️ الأمان والنسخ الاحتياطي اليدوي</h2>
-                <div style="display:flex; gap:10px; flex-direction:column; margin-top:15px;">
-                    <button onclick="exportData()" class="btn-submit" style="background: var(--primary);">📥 تحميل كملف (Backup)</button>
-                    <button onclick="copyDataToClipboard()" class="btn-submit" style="background: var(--text-light);">📋 نسخ البيانات كنص</button>
-                    <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
-                        <input type="file" id="importFile" accept=".json" style="flex:1; min-width:200px; padding:10px; border-radius:10px; background:var(--input-bg); border:1px solid var(--border); color:var(--text);">
-                        <button onclick="importData()" class="btn-submit" style="flex:1; background: var(--warning); min-width:100px;">📤 استرجاع</button>
+                    <!-- الاشتراكات الفعالة -->
+                    <div class="card" style="margin-bottom: 0;">
+                        <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--primary);">🔁 الاشتراكات الفعالة</h3>
+                        <div id="dashActiveSubs" style="width: 100%;"></div>
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <h2>🔔 نظام التنبيهات</h2>
-                <button onclick="requestNotificationPermission()" class="btn-submit" style="background: var(--primary); margin-top:15px;">تفعيل الإشعارات 🔔</button>
-            </div>
-        </div>
 
-        <!-- 🔍 البحث والسجل -->
-        <div id="advanced-log" class="section">
-            <div class="card">
-                <h2>البحث والسجل</h2>
-                <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
-                    <input type="text" id="advSearchInput" onkeyup="performAdvancedSearch()" placeholder="ابحث عن أي شيء..." style="flex:2; outline:none; min-width:0;">
-                    <select id="advSearchCategory" onchange="performAdvancedSearch()" style="flex:1; outline:none; min-width:0;">
-                        <option value="all">كل الأقسام</option>
-                        <option value="fixed_bills">الفواتير</option>
-                        <option value="subscriptions">الاشتراكات</option>
-                        <option value="expenses">المصروفات اليومية</option>
-                        <option value="purchases">المشتريات</option>
-                        <option value="vault">الخزنة</option>
-                        <option value="notes">الملاحظات</option>
-                        <option value="documents">الوثائق</option>
-                    </select>
+            <!-- 📊 الإحصائيات -->
+            <div id="expenses-stats" class="section">
+                <h2 style="margin-bottom: 20px;">📊 إحصائيات وأرشيف المصاريف</h2>
+                <div class="dashboard-grid" style="margin-bottom: 25px;">
+                    <div class="card" style="margin-bottom:0; text-align:center; padding:15px;"><div style="font-size:13px; color:var(--text-light);">صرف اليوم</div><div style="font-size:24px; font-weight:bold; color:var(--text);" id="statToday">0</div></div>
+                    <div class="card" style="margin-bottom:0; text-align:center; padding:15px;"><div style="font-size:13px; color:var(--text-light);">صرف آخر 7 أيام</div><div style="font-size:24px; font-weight:bold; color:var(--warning);" id="statWeek">0</div></div>
+                    <div class="card" style="margin-bottom:0; text-align:center; padding:15px;"><div style="font-size:13px; color:var(--text-light);">صرف هذا الشهر</div><div style="font-size:24px; font-weight:bold; color:var(--danger);" id="statMonth">0</div></div>
+                </div>
+                <div class="card"><h3>أرشيف المصروفات (مرتب حسب التاريخ)</h3><div id="fullExpensesArchive" style="margin-top: 15px; width: 100%;"></div></div>
+            </div>
+
+            <!-- ✅ المهام (أرشيف) -->
+            <div id="todos" class="section card"><h2>✅ أرشيف المهام</h2><div id="fullTodosContainer" style="width: 100%;"></div></div>
+
+            <!-- الأقسام العادية -->
+            <div id="fixed-bills" class="section card">
+                <form onsubmit="saveFixedBill(event)">
+                    <h2>إضافة فاتورة</h2><br>
+                    <div class="form-group"><label>النوع:</label><select id="billType" onchange="toggleFields()"><option value="كهرباء">كهرباء</option><option value="ماء">ماء</option><option value="إنترنت">إنترنت</option></select></div>
+                    <div class="form-group" id="meterGroup"><label>رقم العداد:</label><input type="text" id="meterNumber"></div>
+                    <div class="form-group" id="titleGroup" style="display: none;"><label>عنوان اختياري:</label><input type="text" id="optionalTitle"></div>
+                    <div class="form-group"><label>المبلغ:</label><input type="number" id="billAmount" required></div>
+                    <div class="form-group"><label>التاريخ:</label><input type="date" id="billDate" required></div>
+                    <button type="submit" class="btn-submit">حفظ الفاتورة</button>
+                </form>
+            </div>
+            
+            <div id="subscriptions" class="section card">
+                <form onsubmit="saveSubscription(event)">
+                    <h2>إضافة اشتراك</h2><br>
+                    <div class="form-group"><label>الاسم:</label><input type="text" id="subName" required></div>
+                    <div class="form-group"><label>المبلغ:</label><input type="number" id="subAmount" required></div>
+                    <div class="form-group"><label>تاريخ البدء:</label><input type="date" id="subDate" required></div>
+                    <div class="form-group"><label>المدة:</label><select id="subDuration"><option value="1">شهر</option><option value="3">3 أشهر</option><option value="6">6 أشهر</option><option value="12">سنة</option></select></div>
+                    <button type="submit" class="btn-submit">حفظ الاشتراك</button>
+                </form>
+            </div>
+            
+            <div id="purchases" class="section card">
+                <form onsubmit="savePurchase(event)">
+                    <h2>إضافة مشتريات وضمان</h2><br>
+                    <div class="form-group"><label>المنتج:</label><input type="text" id="purName" required></div>
+                    <div class="form-group"><label>السعر:</label><input type="number" id="purAmount" required></div>
+                    <div class="form-group"><label>التاريخ:</label><input type="date" id="purDate" required></div>
+                    <div class="form-group"><label>الضمان (أشهر):</label><input type="number" id="purWarranty" required value="12"></div>
+                    <button type="submit" class="btn-submit">حفظ المنتج</button>
+                </form>
+            </div>
+            
+            <div id="notes" class="section card">
+                <h2>الملاحظات</h2><br>
+                <form onsubmit="saveNote(event)">
+                    <div class="form-group"><input type="text" id="noteTitle" placeholder="العنوان" style="font-weight:bold; border:none; background:transparent; font-size:18px;"></div>
+                    <div class="form-group"><textarea id="noteBody" rows="4" placeholder="المحتوى..." required style="border:none; resize:none; background:transparent;"></textarea></div>
+                    <button type="submit" class="btn-submit">حفظ الملاحظة</button>
+                </form>
+                <div id="notesContainer" style="margin-top:20px; display:grid; gap:15px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); width: 100%;"></div>
+            </div>
+            
+            <div id="documents" class="section card">
+                <h2>الوثائق الرسمية</h2><br>
+                <form onsubmit="saveDocument(event)">
+                    <div class="form-group"><label>الوثيقة:</label><input type="text" id="docName" required></div>
+                    <div class="form-group"><label>انتهاء الصلاحية:</label><input type="date" id="docExpiry" required></div>
+                    <button type="submit" class="btn-submit">حفظ</button>
+                </form>
+            </div>
+            
+            <div id="vault" class="section card">
+                <h2>الخزنة (الحسابات)</h2><br>
+                <form onsubmit="saveVaultItem(event)">
+                    <div class="form-group"><label>النوع:</label><select id="vaultType" onchange="toggleVaultFields()"><option value="إيميل">إيميل</option><option value="حساب">حساب موقع</option></select></div>
+                    <div class="form-group"><label id="vaultNameLabel">الإيميل:</label><input type="text" id="vaultName" required></div>
+                    <div class="form-group" id="vaultPlatformGroup" style="display:none;"><label>الموقع:</label><input type="text" id="vaultPlatform"></div>
+                    <div class="form-group"><label>كلمة المرور:</label><input type="text" id="vaultPassword" required></div>
+                    <div class="form-group" id="vaultNotesGroup"><label>ملاحظات:</label><input type="text" id="vaultNotes"></div>
+                    <div class="form-group"><label>التاريخ:</label><input type="date" id="vaultDate" required></div>
+                    <button type="submit" class="btn-submit">حفظ آمن</button>
+                </form>
+            </div>
+
+            <!-- ⚙️ قسم الأمان والإعدادات -->
+            <div id="settings" class="section">
+                <div class="card" style="border: 2px solid var(--border);">
+                    <h2>☁️ حالة السحابة (Firebase)</h2>
+                    <p id="cloudStatusText" style="font-weight:bold; color:var(--warning); margin-top:10px; padding: 10px; border-radius: 10px; background: var(--input-bg);">⏳ جاري الاتصال بالسحابة...</p>
+                </div>
+
+                <div class="card">
+                    <h2>🛡️ الأمان والنسخ الاحتياطي اليدوي</h2>
+                    <div style="display:flex; gap:10px; flex-direction:column; margin-top:15px;">
+                        <button onclick="exportData()" class="btn-submit" style="background: var(--primary);">📥 تحميل كملف (Backup)</button>
+                        <button onclick="copyDataToClipboard()" class="btn-submit" style="background: var(--text-light);">📋 نسخ البيانات كنص</button>
+                        <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+                            <input type="file" id="importFile" accept=".json" style="flex:1; min-width:200px; padding:10px; border-radius:10px; background:var(--input-bg); border:1px solid var(--border); color:var(--text);">
+                            <button onclick="importData()" class="btn-submit" style="flex:1; background: var(--warning); min-width:100px;">📤 استرجاع</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>🔔 نظام التنبيهات</h2>
+                    <button onclick="requestNotificationPermission()" class="btn-submit" style="background: var(--primary); margin-top:15px;">تفعيل الإشعارات 🔔</button>
                 </div>
             </div>
-            <div class="card" id="advSearchResultsContainer" style="width: 100%;"></div>
+
+            <!-- 🔍 البحث والسجل -->
+            <div id="advanced-log" class="section">
+                <div class="card">
+                    <h2>البحث والسجل</h2>
+                    <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
+                        <input type="text" id="advSearchInput" onkeyup="performAdvancedSearch()" placeholder="ابحث عن أي شيء..." style="flex:2; outline:none; min-width:0;">
+                        <select id="advSearchCategory" onchange="performAdvancedSearch()" style="flex:1; outline:none; min-width:0;">
+                            <option value="all">كل الأقسام</option>
+                            <option value="fixed_bills">الفواتير</option>
+                            <option value="subscriptions">الاشتراكات</option>
+                            <option value="expenses">المصروفات اليومية</option>
+                            <option value="purchases">المشتريات</option>
+                            <option value="vault">الخزنة</option>
+                            <option value="notes">الملاحظات</option>
+                            <option value="documents">الوثائق</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card" id="advSearchResultsContainer" style="width: 100%;"></div>
+            </div>
+
+        </div>
+
+        <!-- 🚀 الفوتر المدمج مباشرة بالهيكل -->
+        <div class="app-footer">
+            <button class="footer-icon-btn" onclick="toggleMobileMenu()">☰</button>
+            <div class="footer-action-wrapper">
+                <div class="footer-menu" id="footerMenu">
+                    <button class="footer-item" onclick="handleFooterAction('fixed-bills')">📄 إضافة فاتورة</button>
+                    <button class="footer-item" onclick="handleFooterAction('subscriptions')">🔁 اشتراك جديد</button>
+                    <button class="footer-item" onclick="handleFooterAction('purchases')">🛒 تسجيل منتج</button>
+                    <button class="footer-item" onclick="handleFooterAction('notes')">📝 ملاحظة سريعة</button>
+                </div>
+                <button class="footer-action-btn" id="footerBtn" onclick="toggleFooter()">
+                    <span id="footerIcon">➕</span> <span id="footerText">الإضافة السريعة</span>
+                </button>
+            </div>
+            <button class="footer-icon-btn" id="footerBackBtn" onclick="history.back()">🔙</button>
         </div>
 
     </div>
@@ -751,7 +768,8 @@
         function applyTheme() { 
             document.body.classList.toggle('dark-mode', db.settings.darkMode); 
             document.getElementById('themeIconDesktop').innerText = db.settings.darkMode ? '☀️' : '🌙'; 
-            document.getElementById('themeColorMeta').setAttribute('content', db.settings.darkMode ? '#0f172a' : '#f8fafc');
+            const color = db.settings.darkMode ? '#0f172a' : '#f8fafc';
+            document.getElementById('themeColorMeta').setAttribute('content', color);
         }
 
         function toggleTheme() { 
@@ -1059,3 +1077,4 @@
     </script>
 </body>
 </html>
+ 
