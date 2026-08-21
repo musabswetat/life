@@ -169,9 +169,9 @@
 
         <!-- ⚙️ قسم الأمان والإعدادات المطور -->
         <div id="settings" class="section">
-            <div class="card" style="border: 2px solid var(--success); background: rgba(16, 185, 129, 0.05);">
-                <h2>☁️ حالة السحابة</h2>
-                <p id="cloudStatusText" style="font-weight:bold; color:var(--success); margin-top:10px;">🟢 متصل ومحمي (مزامنة لحظية نشطة)</p>
+            <div class="card" style="border: 2px solid var(--border);">
+                <h2>☁️ حالة السحابة (Firebase)</h2>
+                <p id="cloudStatusText" style="font-weight:bold; color:var(--warning); margin-top:10px; padding: 10px; border-radius: 10px; background: var(--input-bg);">⏳ جاري الاتصال بالسحابة...</p>
             </div>
 
             <div class="card">
@@ -201,10 +201,11 @@
 
     <script>
         // --- 0. إعدادات Firebase ☁️ المحدثة ---
+        // ✅ تم إضافة الرابط الأوروبي الصحيح هنا
         const firebaseConfig = {
             apiKey: "AIzaSyCXalyz_Xa7IeSuT8enh6MCu2alH5HvBMY",
             authDomain: "life-8892e.firebaseapp.com",
-            databaseURL: "https://life-8892e-default-rtdb.firebaseio.com", // الرابط الذي كان ناقصاً
+            databaseURL: "https://life-8892e-default-rtdb.europe-west1.firebasedatabase.app", 
             projectId: "life-8892e",
             storageBucket: "life-8892e.firebasestorage.app",
             messagingSenderId: "164493978016",
@@ -214,6 +215,23 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const dbRef = database.ref('myLifeData');
+
+        // --- 🟢 مراقبة حالة الاتصال الحقيقية لعرضها في الإعدادات ---
+        const connectedRef = firebase.database().ref(".info/connected");
+        connectedRef.on("value", (snap) => {
+            const statusEl = document.getElementById('cloudStatusText');
+            if (snap.val() === true) {
+                if(statusEl) {
+                    statusEl.innerText = "🟢 متصل ومحمي (مزامنة لحظية نشطة)";
+                    statusEl.style.color = "var(--success)";
+                }
+            } else {
+                if(statusEl) {
+                    statusEl.innerText = "🔴 غير متصل بالسحابة (يتم الحفظ محلياً فقط)";
+                    statusEl.style.color = "var(--danger)";
+                }
+            }
+        });
 
         // --- 1. قاعدة البيانات المحلية ---
         let db = JSON.parse(localStorage.getItem('myLifeAppDB')) || {};
@@ -226,7 +244,7 @@
         const todayStr = new Date().toISOString().split('T')[0];
         ['billDate', 'subDate', 'purDate', 'vaultDate', 'docExpiry'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = todayStr; });
 
-        // --- ☁️ محرك المزامنة اللحظية (Real-time Sync) ---
+        // --- ☁️ محرك المزامنة اللحظية ---
         let isSyncing = false;
         function showSyncStatus(msg, isError = false) {
             const el = document.getElementById('syncStatus'); el.innerText = msg;
@@ -242,7 +260,7 @@
                 .catch(err => { showSyncStatus('❌ فشل الاتصال', true); isSyncing = false; });
         }
 
-        // 🟢 السحر هنا: استماع للتغييرات في السحابة وتحديث الشاشة فوراً
+        // استماع للتغييرات في السحابة
         dbRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data && JSON.stringify(data) !== JSON.stringify(db)) {
@@ -257,7 +275,6 @@
             }
         });
 
-        // دالة التنظيف التلقائي
         function cleanupOldData() {
             const now = new Date(); let changed = false;
             db.expenses = db.expenses.filter(ex => { return ((now - new Date(ex.date)) / (1000 * 60 * 60 * 24)) <= 120; });
@@ -302,6 +319,17 @@
             });
             document.getElementById('dashSpent').innerHTML = `${spentThisMonth.toLocaleString()} <span style="font-size:16px; color:var(--text-light); font-weight:normal;">شيكل</span>`;
             document.getElementById('dashActiveSubs').innerHTML = activeSubsHtml || '<p style="color:var(--text-light); font-size:14px;">لا توجد اشتراكات فعالة.</p>';
+
+            let alertsHtml = '';
+            const hasElec = db.fixed_bills.some(b => { let d = new Date(b.date); return b.type === 'كهرباء' && d.getMonth() === cMonth && d.getFullYear() === cYear; });
+            if(!hasElec) alertsHtml += `<span style="color:var(--danger); display:block; margin-bottom:5px;">⚠️ لم تُسجل فاتورة كهرباء هذا الشهر</span>`;
+            db.documents.forEach(doc => {
+                let diff = Math.ceil((new Date(doc.expiryDate) - new Date()) / (1000 * 60 * 60 * 24));
+                if(diff <= 30 && diff >= 0) alertsHtml += `<span style="color:var(--warning); display:block;">⏳ وثيقة (${doc.name}) تنتهي قريباً</span>`;
+                else if (diff < 0) alertsHtml += `<span style="color:var(--danger); display:block;">❌ وثيقة (${doc.name}) منتهية</span>`;
+            });
+            document.getElementById('dashAlerts').innerHTML = alertsHtml || '<span style="color:var(--success);">✅ جميع أمورك سليمة</span>';
+
             renderDashTodos(); renderDashExpenses(); 
         }
 
