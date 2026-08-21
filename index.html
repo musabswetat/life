@@ -226,26 +226,37 @@
             }
         });
 
-        // --- 1. قاعدة البيانات المحلية ---
-        let db = JSON.parse(localStorage.getItem('myLifeAppDB')) || {};
-        // استرجاع القوائم في حال كانت مفقودة لضمان عدم حدوث Crash
-        if (!db.fixed_bills) db.fixed_bills = []; if (!db.subscriptions) db.subscriptions = [];
-        if (!db.purchases) db.purchases = []; if (!db.vault) db.vault = [];
-        if (!db.notes) db.notes = []; if (!db.documents) db.documents = []; 
-        if (!db.todos) db.todos = []; if (!db.expenses) db.expenses = []; 
-        if (!db.settings) db.settings = { darkMode: false };
+        // --- 1. مصفاة البيانات السحرية (Data Normalizer) - الحل الجذري للانهيار ---
+        function normalizeDB(data) {
+            if (!data) data = {};
+            const lists = ['fixed_bills', 'subscriptions', 'purchases', 'vault', 'notes', 'documents', 'todos', 'expenses'];
+            lists.forEach(key => {
+                if (data[key]) {
+                    // إذا قامت السحابة بتحويل القائمة إلى كائن (Object)، نقوم بإعادتها إلى قائمة (Array)
+                    if (!Array.isArray(data[key])) {
+                        data[key] = Object.values(data[key]).filter(i => i !== null);
+                    }
+                } else {
+                    data[key] = [];
+                }
+            });
+            if (!data.settings) data.settings = { darkMode: false };
+            return data;
+        }
+
+        // جلب البيانات المحلية وتنقيتها
+        let db = normalizeDB(JSON.parse(localStorage.getItem('myLifeAppDB')));
 
         const todayStr = new Date().toISOString().split('T')[0];
         ['billDate', 'subDate', 'purDate', 'vaultDate', 'docExpiry'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = todayStr; });
 
-        // --- ☁️ محرك المزامنة اللحظية (مطور ومحلول مشاكله) ---
+        // --- ☁️ محرك المزامنة اللحظية ---
         function showSyncStatus(msg, isError = false) {
             const el = document.getElementById('syncStatus'); el.innerText = msg;
             el.style.background = isError ? 'rgba(239, 68, 68, 0.9)' : 'rgba(16, 185, 129, 0.9)';
             el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2000);
         }
 
-        // تم إزالة isSyncing lock ليسمح لك بإضافة مهام سريعة متتالية دون أن يتم تجاهل أي منها
         function saveToCloud() {
             showSyncStatus('☁️ جاري الحفظ...');
             dbRef.set(db).then(() => { showSyncStatus('✅ محفوظ سحابياً'); })
@@ -255,23 +266,18 @@
         // الاستماع للتغييرات من أجهزة أخرى
         dbRef.on('value', (snapshot) => {
             const data = snapshot.val();
-            if (data && JSON.stringify(data) !== JSON.stringify(db)) {
-                db = data;
-                
-                // الحل السحري: إعادة تعريف القوائم الفارغة التي قد يحذفها Firebase تلقائياً لتجنب الـ Crash
-                if (!db.fixed_bills) db.fixed_bills = []; if (!db.subscriptions) db.subscriptions = [];
-                if (!db.purchases) db.purchases = []; if (!db.vault) db.vault = [];
-                if (!db.notes) db.notes = []; if (!db.documents) db.documents = []; 
-                if (!db.todos) db.todos = []; if (!db.expenses) db.expenses = []; 
-                if (!db.settings) db.settings = { darkMode: false };
-
-                localStorage.setItem('myLifeAppDB', JSON.stringify(db));
-                cleanupOldData();
-                updateDashboardZen();
-                if(document.getElementById('fullTodosContainer').innerHTML !== '') renderFullTodos(); 
-                if(document.getElementById('fullExpensesArchive').innerHTML !== '') renderExpenseStats(); 
-                if(document.getElementById('notesContainer')) renderNotes();
-                showSyncStatus('🔄 تم التحديث');
+            if (data) {
+                const normalizedData = normalizeDB(data); // تنقية البيانات القادمة من السحابة فوراً
+                if (JSON.stringify(normalizedData) !== JSON.stringify(db)) {
+                    db = normalizedData;
+                    localStorage.setItem('myLifeAppDB', JSON.stringify(db));
+                    cleanupOldData();
+                    updateDashboardZen();
+                    if(document.getElementById('fullTodosContainer') && document.getElementById('fullTodosContainer').innerHTML !== '') renderFullTodos(); 
+                    if(document.getElementById('fullExpensesArchive') && document.getElementById('fullExpensesArchive').innerHTML !== '') renderExpenseStats(); 
+                    if(document.getElementById('notesContainer')) renderNotes();
+                    showSyncStatus('🔄 تم التحديث');
+                }
             }
         });
 
@@ -333,14 +339,14 @@
             renderDashTodos(); renderDashExpenses(); 
         }
 
-        // دالة الحفظ التي تجمع التحديث المحلي والسحابي معاً
+        // دالة الحفظ 
         function finalizeAction(msg=null) { 
             localStorage.setItem('myLifeAppDB', JSON.stringify(db)); 
             saveToCloud(); 
             if(msg) alert(msg); 
             updateDashboardZen(); 
-            if(document.getElementById('fullTodosContainer').innerHTML !== '') renderFullTodos(); 
-            if(document.getElementById('fullExpensesArchive').innerHTML !== '') renderExpenseStats(); 
+            if(document.getElementById('fullTodosContainer') && document.getElementById('fullTodosContainer').innerHTML !== '') renderFullTodos(); 
+            if(document.getElementById('fullExpensesArchive') && document.getElementById('fullExpensesArchive').innerHTML !== '') renderExpenseStats(); 
             if(document.getElementById('notesContainer')) renderNotes(); 
         }
 
