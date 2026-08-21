@@ -13,8 +13,11 @@
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --text-light: #64748b; --danger: #f43f5e; --success: #10b981; --warning: #f59e0b; --border: #f1f5f9; --input-bg: #f8fafc; }
         body.dark-mode { --primary: #818cf8; --primary-hover: #6366f1; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --text-light: #94a3b8; --border: #334155; --input-bg: #0f172a; }
+        
+        /* 📱 إصلاحات العرض المرن ومنع التمرير الأفقي الصارم */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg) !important; color: var(--text) !important; display: flex; height: 100vh; overflow: hidden; transition: 0.3s; }
+        html, body { width: 100%; max-width: 100vw; overflow-x: hidden; }
+        body { background-color: var(--bg) !important; color: var(--text) !important; display: flex; height: 100vh; transition: 0.3s; }
         
         .sidebar-overlay { display: none; position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); z-index: 104; opacity: 0; transition: 0.3s; }
         .sidebar { width: 85px; background: var(--card); border-left: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 8px; z-index: 105; transition: all 0.3s ease; overflow-x: hidden;}
@@ -25,14 +28,22 @@
         .sidebar button span.text { opacity: 0; transition: opacity 0.3s; }
         .sidebar:hover button span.text { opacity: 1; }
 
-        .main-content { flex: 1; padding: 30px 25px 120px 25px; overflow-y: auto; scroll-behavior: smooth; position: relative; }
-        .section { display: none; animation: fadeIn 0.3s ease-out; }
+        .main-content { flex: 1; padding: 30px 25px 120px 25px; overflow-y: auto; scroll-behavior: smooth; position: relative; width: 100%; overflow-x: hidden; box-sizing: border-box; }
+        .section { display: none; animation: fadeIn 0.3s ease-out; width: 100%; }
         .section.active { display: block; }
         
-        .card { background: var(--card); padding: 20px; border-radius: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.01); }
+        .card { background: var(--card); padding: 20px; border-radius: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.01); width: 100%; box-sizing: border-box; overflow: hidden; }
         .dashboard-header { font-size: 26px; font-weight: bold; margin-bottom: 5px; color: var(--text); }
         .dashboard-subtitle { color: var(--text-light); font-size: 14px; margin-bottom: 25px; }
         
+        /* 📊 التنسيق المرن للملخص والنماذج */
+        .summary-card { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; width: 100%; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; width: 100%; }
+        
+        .dash-form { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; }
+        .dash-input { padding: 12px; border-radius: 10px; border: none; background: var(--input-bg) !important; color: var(--text) !important; flex: 1; font-size: 14px; outline: none; min-width: 0; width: 100%; box-sizing: border-box; }
+        .dash-input:focus { box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3); }
+
         .app-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card); border-top: 1px solid var(--border); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 -4px 15px rgba(0,0,0,0.03); gap: 10px; }
         .footer-icon-btn { width: 45px; height: 45px; border-radius: 14px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; flex-shrink: 0; }
         .footer-icon-btn:hover { background: var(--border); }
@@ -47,11 +58,29 @@
         .footer-item:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
         @media screen and (max-height: 500px) { .app-footer { display: none !important; } }
-        .form-group { margin-bottom: 18px; } .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text); font-size: 14px; } .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; background: var(--input-bg) !important; color: var(--text) !important; border: 1px solid var(--border); border-radius: 14px; font-size: 15px; outline: none; transition: 0.2s; } .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); } .btn-submit { background: var(--text); color: var(--card); border: none; padding: 14px 25px; border-radius: 14px; cursor: pointer; font-size: 15px; font-weight: 600; width: 100%; transition: 0.2s; }
+        .form-group { margin-bottom: 18px; width: 100%; } .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text); font-size: 14px; } .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; background: var(--input-bg) !important; color: var(--text) !important; border: 1px solid var(--border); border-radius: 14px; font-size: 15px; outline: none; transition: 0.2s; min-width: 0; box-sizing: border-box; } .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); } .btn-submit { background: var(--text); color: var(--card); border: none; padding: 14px 25px; border-radius: 14px; cursor: pointer; font-size: 15px; font-weight: 600; width: 100%; transition: 0.2s; }
         .zen-progress-bg { background: var(--border); height: 6px; border-radius: 10px; overflow: hidden; margin-top: 8px; } .zen-progress-fill { background: var(--primary); height: 100%; border-radius: 10px; transition: 0.5s; }
         .date-group-header { background: var(--border); padding: 8px 15px; border-radius: 8px; font-weight: bold; font-size: 13px; color: var(--text); margin: 20px 0 10px 0; display: inline-block; }
-        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border); font-size: 14px; flex-wrap: wrap; gap: 10px;} .list-item:last-child { border-bottom: none; }
-        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100vh; padding-top: 20px; box-shadow: -5px 0 25px rgba(0,0,0,0.1); border-left: none; align-items: flex-start; z-index: 105;} .sidebar.open { right: 0; } .sidebar button { width: 100%; border-radius: 0; padding: 16px 25px; font-size: 16px; } .sidebar button span.text { opacity: 1; display: inline;} .sidebar-overlay { display: block; pointer-events: none; } .sidebar-overlay.show { opacity: 1; pointer-events: auto; } .main-content { padding: 20px 15px 110px 15px; } }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border); font-size: 14px; flex-wrap: wrap; gap: 10px; word-break: break-word;} .list-item:last-child { border-bottom: none; }
+        
+        /* 📱 تخصيصات الشاشات الصغيرة (الهواتف) - الحل الجذري للتنسيق */
+        @media (max-width: 768px) { 
+            body, html { overflow-x: hidden; width: 100%; } 
+            .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100vh; padding-top: 20px; box-shadow: -5px 0 25px rgba(0,0,0,0.1); border-left: none; align-items: flex-start; z-index: 105;} 
+            .sidebar.open { right: 0; } 
+            .sidebar button { width: 100%; border-radius: 0; padding: 16px 25px; font-size: 16px; } 
+            .sidebar button span.text { opacity: 1; display: inline;} 
+            .sidebar-overlay { display: block; pointer-events: none; } 
+            .sidebar-overlay.show { opacity: 1; pointer-events: auto; } 
+            .main-content { padding: 20px 15px 110px 15px; width: 100%; overflow-x: hidden; box-sizing: border-box; } 
+            .card { padding: 15px; margin-bottom: 15px; border-radius: 16px; width: 100%; box-sizing: border-box; overflow: hidden; } 
+            .dashboard-header { font-size: 22px; }
+            .dashboard-grid { grid-template-columns: 1fr; width: 100%; } 
+            
+            /* تحويل الحقول لتكون فوق بعضها بدلاً من بجانب بعضها لمنع الكسر */
+            .dash-form { flex-direction: column; } 
+            .summary-card { flex-direction: column; align-items: flex-start; }
+        }
         @media (min-width: 769px) { .app-footer { padding-right: 105px; } .footer-icon-btn[onclick="toggleMobileMenu()"] { display: none; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         #syncStatus { position: fixed; top: 15px; left: 15px; background: rgba(0,0,0,0.8); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; z-index: 9999; display: flex; align-items: center; gap: 5px; opacity: 0; transition: 0.3s; font-weight:bold; pointer-events:none;}
@@ -105,34 +134,35 @@
             <div class="dashboard-header">طاب يومك.</div>
             <div class="dashboard-subtitle">بياناتك آمنة ومتزامنة لحظياً عبر أجهزتك ☁️</div>
 
-            <div class="card" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
-                <div>
+            <div class="card summary-card">
+                <div style="width: 100%;">
                     <div style="color: var(--text-light); font-size: 14px; margin-bottom: 5px;">دُفِعَ هذا الشهر (فواتير، اشتراكات، مصروفات)</div>
                     <div style="font-size: 32px; font-weight: bold; color: var(--text);" id="dashSpent">0 <span style="font-size:16px; color:var(--text-light); font-weight:normal;">شيكل</span></div>
                 </div>
-                <div id="dashAlerts" style="font-size: 13px;"></div>
+                <div id="dashAlerts" style="font-size: 13px; width: 100%;"></div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <div class="dashboard-grid">
                 <!-- المهام -->
                 <div class="card" style="margin-bottom: 0;">
                     <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--text);">✅ مهام اليوم</h3>
-                    <form onsubmit="addTodoDash(event)" style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <input type="text" id="todoInputDash" placeholder="أضف مهمة للقيام بها اليوم..." required style="padding:10px; border-radius:10px; border:none; background:var(--input-bg); flex:1; font-size:14px; outline:none;">
+                    <form onsubmit="addTodoDash(event)" class="dash-form">
+                        <input type="text" id="todoInputDash" placeholder="أضف مهمة للقيام بها اليوم..." required class="dash-input">
+                        <button type="submit" style="display:none;"></button>
                     </form>
-                    <div id="dashTodosList" style="max-height: 180px; overflow-y: auto;"></div>
+                    <div id="dashTodosList" style="max-height: 180px; overflow-y: auto; width: 100%;"></div>
                 </div>
 
                 <!-- المصروفات اليومية -->
                 <div class="card" style="margin-bottom: 0;">
                     <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--text);">💸 مصروفات اليوم</h3>
-                    <form onsubmit="addExpenseDash(event)" style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <input type="text" id="expenseDescDash" placeholder="ماذا اشتريت؟" required style="padding:10px; border-radius:10px; border:none; background:var(--input-bg); flex:2; font-size:14px; outline:none;">
-                        <input type="number" id="expenseAmountDash" placeholder="المبلغ" required style="padding:10px; border-radius:10px; border:none; background:var(--input-bg); flex:1; font-size:14px; outline:none;">
+                    <form onsubmit="addExpenseDash(event)" class="dash-form">
+                        <input type="text" id="expenseDescDash" placeholder="ماذا اشتريت؟" required class="dash-input">
+                        <input type="number" id="expenseAmountDash" placeholder="المبلغ" required class="dash-input">
                         <button type="submit" style="display:none;"></button> 
                     </form>
-                    <div id="dashExpensesList" style="max-height: 120px; overflow-y: auto;"></div>
-                    <div style="margin-top:15px; padding-top:10px; border-top:1px dashed var(--border); display:flex; justify-content:space-between; font-size:14px; font-weight:bold; color:var(--text);">
+                    <div id="dashExpensesList" style="max-height: 120px; overflow-y: auto; width: 100%;"></div>
+                    <div style="margin-top:15px; padding-top:10px; border-top:1px dashed var(--border); display:flex; justify-content:space-between; font-size:14px; font-weight:bold; color:var(--text); width: 100%;">
                         <span>صرف اليوم:</span> <span id="dashExpensesTotal" style="color:var(--danger);">0 شيكل</span>
                     </div>
                 </div>
@@ -140,7 +170,7 @@
                 <!-- الاشتراكات الفعالة -->
                 <div class="card" style="margin-bottom: 0;">
                     <h3 style="font-size: 16px; margin-bottom: 20px; color: var(--primary);">🔁 الاشتراكات الفعالة</h3>
-                    <div id="dashActiveSubs"></div>
+                    <div id="dashActiveSubs" style="width: 100%;"></div>
                 </div>
             </div>
         </div>
@@ -148,26 +178,26 @@
         <!-- 📊 الإحصائيات -->
         <div id="expenses-stats" class="section">
             <h2 style="margin-bottom: 20px;">📊 إحصائيات وأرشيف المصاريف</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px;">
+            <div class="dashboard-grid" style="margin-bottom: 25px;">
                 <div class="card" style="margin-bottom:0; text-align:center; padding:15px;"><div style="font-size:13px; color:var(--text-light);">صرف اليوم</div><div style="font-size:24px; font-weight:bold; color:var(--text);" id="statToday">0</div></div>
                 <div class="card" style="margin-bottom:0; text-align:center; padding:15px;"><div style="font-size:13px; color:var(--text-light);">صرف آخر 7 أيام</div><div style="font-size:24px; font-weight:bold; color:var(--warning);" id="statWeek">0</div></div>
                 <div class="card" style="margin-bottom:0; text-align:center; padding:15px;"><div style="font-size:13px; color:var(--text-light);">صرف هذا الشهر</div><div style="font-size:24px; font-weight:bold; color:var(--danger);" id="statMonth">0</div></div>
             </div>
-            <div class="card"><h3>أرشيف المصروفات (مرتب حسب التاريخ)</h3><div id="fullExpensesArchive" style="margin-top: 15px;"></div></div>
+            <div class="card"><h3>أرشيف المصروفات (مرتب حسب التاريخ)</h3><div id="fullExpensesArchive" style="margin-top: 15px; width: 100%;"></div></div>
         </div>
 
         <!-- ✅ المهام (أرشيف) -->
-        <div id="todos" class="section card"><h2>✅ أرشيف المهام</h2><div id="fullTodosContainer"></div></div>
+        <div id="todos" class="section card"><h2>✅ أرشيف المهام</h2><div id="fullTodosContainer" style="width: 100%;"></div></div>
 
         <!-- الأقسام العادية -->
         <div id="fixed-bills" class="section card"><form onsubmit="saveFixedBill(event)"><h2>إضافة فاتورة</h2><br><div class="form-group"><label>النوع:</label><select id="billType" onchange="toggleFields()"><option value="كهرباء">كهرباء</option><option value="ماء">ماء</option><option value="إنترنت">إنترنت</option></select></div><div class="form-group" id="meterGroup"><label>رقم العداد:</label><input type="text" id="meterNumber"></div><div class="form-group" id="titleGroup" style="display: none;"><label>عنوان اختياري:</label><input type="text" id="optionalTitle"></div><div class="form-group"><label>المبلغ:</label><input type="number" id="billAmount" required></div><div class="form-group"><label>التاريخ:</label><input type="date" id="billDate" required></div><button type="submit" class="btn-submit">حفظ الفاتورة</button></form></div>
         <div id="subscriptions" class="section card"><form onsubmit="saveSubscription(event)"><h2>إضافة اشتراك</h2><br><div class="form-group"><label>الاسم:</label><input type="text" id="subName" required></div><div class="form-group"><label>المبلغ:</label><input type="number" id="subAmount" required></div><div class="form-group"><label>تاريخ البدء:</label><input type="date" id="subDate" required></div><div class="form-group"><label>المدة:</label><select id="subDuration"><option value="1">شهر</option><option value="3">3 أشهر</option><option value="6">6 أشهر</option><option value="12">سنة</option></select></div><button type="submit" class="btn-submit">حفظ الاشتراك</button></form></div>
         <div id="purchases" class="section card"><form onsubmit="savePurchase(event)"><h2>إضافة مشتريات وضمان</h2><br><div class="form-group"><label>المنتج:</label><input type="text" id="purName" required></div><div class="form-group"><label>السعر:</label><input type="number" id="purAmount" required></div><div class="form-group"><label>التاريخ:</label><input type="date" id="purDate" required></div><div class="form-group"><label>الضمان (أشهر):</label><input type="number" id="purWarranty" required value="12"></div><button type="submit" class="btn-submit">حفظ المنتج</button></form></div>
-        <div id="notes" class="section card"><h2>الملاحظات</h2><br><form onsubmit="saveNote(event)"><div class="form-group"><input type="text" id="noteTitle" placeholder="العنوان" style="font-weight:bold; border:none; background:transparent; font-size:18px;"></div><div class="form-group"><textarea id="noteBody" rows="4" placeholder="المحتوى..." required style="border:none; resize:none; background:transparent;"></textarea></div><button type="submit" class="btn-submit">حفظ الملاحظة</button></form><div id="notesContainer" style="margin-top:20px; display:grid; gap:15px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"></div></div>
+        <div id="notes" class="section card"><h2>الملاحظات</h2><br><form onsubmit="saveNote(event)"><div class="form-group"><input type="text" id="noteTitle" placeholder="العنوان" style="font-weight:bold; border:none; background:transparent; font-size:18px;"></div><div class="form-group"><textarea id="noteBody" rows="4" placeholder="المحتوى..." required style="border:none; resize:none; background:transparent;"></textarea></div><button type="submit" class="btn-submit">حفظ الملاحظة</button></form><div id="notesContainer" style="margin-top:20px; display:grid; gap:15px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); width: 100%;"></div></div>
         <div id="documents" class="section card"><h2>الوثائق الرسمية</h2><br><form onsubmit="saveDocument(event)"><div class="form-group"><label>الوثيقة:</label><input type="text" id="docName" required></div><div class="form-group"><label>انتهاء الصلاحية:</label><input type="date" id="docExpiry" required></div><button type="submit" class="btn-submit">حفظ</button></form></div>
         <div id="vault" class="section card"><h2>الخزنة (الحسابات)</h2><br><form onsubmit="saveVaultItem(event)"><div class="form-group"><label>النوع:</label><select id="vaultType" onchange="toggleVaultFields()"><option value="إيميل">إيميل</option><option value="حساب">حساب موقع</option></select></div><div class="form-group"><label id="vaultNameLabel">الإيميل:</label><input type="text" id="vaultName" required></div><div class="form-group" id="vaultPlatformGroup" style="display:none;"><label>الموقع:</label><input type="text" id="vaultPlatform"></div><div class="form-group"><label>كلمة المرور:</label><input type="text" id="vaultPassword" required></div><div class="form-group" id="vaultNotesGroup"><label>ملاحظات:</label><input type="text" id="vaultNotes"></div><div class="form-group"><label>التاريخ:</label><input type="date" id="vaultDate" required></div><button type="submit" class="btn-submit">حفظ آمن</button></form></div>
 
-        <!-- ⚙️ قسم الأمان والإعدادات المطور -->
+        <!-- ⚙️ قسم الأمان والإعدادات -->
         <div id="settings" class="section">
             <div class="card" style="border: 2px solid var(--border);">
                 <h2>☁️ حالة السحابة (Firebase)</h2>
@@ -179,9 +209,9 @@
                 <div style="display:flex; gap:10px; flex-direction:column; margin-top:15px;">
                     <button onclick="exportData()" class="btn-submit" style="background: var(--primary);">📥 تحميل كملف (Backup)</button>
                     <button onclick="copyDataToClipboard()" class="btn-submit" style="background: var(--text-light);">📋 نسخ البيانات كنص</button>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
-                        <input type="file" id="importFile" accept=".json" style="flex:2; padding:10px; border-radius:10px; background:var(--input-bg); border:1px solid var(--border); color:var(--text);">
-                        <button onclick="importData()" class="btn-submit" style="flex:1; background: var(--warning);">📤 استرجاع</button>
+                    <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+                        <input type="file" id="importFile" accept=".json" style="flex:1; min-width:200px; padding:10px; border-radius:10px; background:var(--input-bg); border:1px solid var(--border); color:var(--text);">
+                        <button onclick="importData()" class="btn-submit" style="flex:1; background: var(--warning); min-width:100px;">📤 استرجاع</button>
                     </div>
                 </div>
             </div>
@@ -193,8 +223,8 @@
 
         <!-- 🔍 البحث والسجل -->
         <div id="advanced-log" class="section">
-            <div class="card"><h2>البحث والسجل</h2><div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;"><input type="text" id="advSearchInput" onkeyup="performAdvancedSearch()" placeholder="ابحث عن أي شيء..." style="flex:2; outline:none;"><select id="advSearchCategory" onchange="performAdvancedSearch()" style="flex:1; outline:none;"><option value="all">كل الأقسام</option><option value="fixed_bills">الفواتير</option><option value="subscriptions">الاشتراكات</option><option value="expenses">المصروفات اليومية</option><option value="purchases">المشتريات</option><option value="vault">الخزنة</option><option value="notes">الملاحظات</option><option value="documents">الوثائق</option></select></div></div>
-            <div class="card" id="advSearchResultsContainer"></div>
+            <div class="card"><h2>البحث والسجل</h2><div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;"><input type="text" id="advSearchInput" onkeyup="performAdvancedSearch()" placeholder="ابحث عن أي شيء..." style="flex:2; outline:none; min-width:0;"><select id="advSearchCategory" onchange="performAdvancedSearch()" style="flex:1; outline:none; min-width:0;"><option value="all">كل الأقسام</option><option value="fixed_bills">الفواتير</option><option value="subscriptions">الاشتراكات</option><option value="expenses">المصروفات اليومية</option><option value="purchases">المشتريات</option><option value="vault">الخزنة</option><option value="notes">الملاحظات</option><option value="documents">الوثائق</option></select></div></div>
+            <div class="card" id="advSearchResultsContainer" style="width: 100%;"></div>
         </div>
 
     </div>
@@ -215,7 +245,6 @@
         const database = firebase.database();
         const dbRef = database.ref('myLifeData');
 
-        // حالة الاتصال للواجهة
         const connectedRef = firebase.database().ref(".info/connected");
         connectedRef.on("value", (snap) => {
             const statusEl = document.getElementById('cloudStatusText');
@@ -226,27 +255,20 @@
             }
         });
 
-        // --- 1. مصفاة البيانات السحرية (Data Normalizer) - الحل الجذري للانهيار ---
+        // --- 1. مصفاة البيانات السحرية ---
         function normalizeDB(data) {
             if (!data) data = {};
             const lists = ['fixed_bills', 'subscriptions', 'purchases', 'vault', 'notes', 'documents', 'todos', 'expenses'];
             lists.forEach(key => {
                 if (data[key]) {
-                    // إذا قامت السحابة بتحويل القائمة إلى كائن (Object)، نقوم بإعادتها إلى قائمة (Array)
-                    if (!Array.isArray(data[key])) {
-                        data[key] = Object.values(data[key]).filter(i => i !== null);
-                    }
-                } else {
-                    data[key] = [];
-                }
+                    if (!Array.isArray(data[key])) { data[key] = Object.values(data[key]).filter(i => i !== null); }
+                } else { data[key] = []; }
             });
             if (!data.settings) data.settings = { darkMode: false };
             return data;
         }
 
-        // جلب البيانات المحلية وتنقيتها
         let db = normalizeDB(JSON.parse(localStorage.getItem('myLifeAppDB')));
-
         const todayStr = new Date().toISOString().split('T')[0];
         ['billDate', 'subDate', 'purDate', 'vaultDate', 'docExpiry'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = todayStr; });
 
@@ -263,11 +285,10 @@
                 .catch(err => { showSyncStatus('❌ فشل الاتصال', true); });
         }
 
-        // الاستماع للتغييرات من أجهزة أخرى
         dbRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                const normalizedData = normalizeDB(data); // تنقية البيانات القادمة من السحابة فوراً
+                const normalizedData = normalizeDB(data);
                 if (JSON.stringify(normalizedData) !== JSON.stringify(db)) {
                     db = normalizedData;
                     localStorage.setItem('myLifeAppDB', JSON.stringify(db));
@@ -282,7 +303,7 @@
         });
 
         function cleanupOldData() {
-            const now = new Date();
+            const now = new Date(); let changed = false;
             db.expenses = db.expenses.filter(ex => { return ((now - new Date(ex.date)) / (1000 * 60 * 60 * 24)) <= 120; });
             db.todos = db.todos.filter(t => { return ((now - new Date(t.date)) / (1000 * 60 * 60 * 24)) <= 30; });
             localStorage.setItem('myLifeAppDB', JSON.stringify(db));
@@ -339,7 +360,6 @@
             renderDashTodos(); renderDashExpenses(); 
         }
 
-        // دالة الحفظ 
         function finalizeAction(msg=null) { 
             localStorage.setItem('myLifeAppDB', JSON.stringify(db)); 
             saveToCloud(); 
@@ -353,13 +373,13 @@
         function addTodoDash(e) { e.preventDefault(); db.todos.push({ id: Date.now(), text: document.getElementById('todoInputDash').value, done: false, date: todayStr }); finalizeAction(); document.getElementById('todoInputDash').value=''; }
         function toggleTodo(id) { const t = db.todos.find(x => x.id === id); if(t) { t.done = !t.done; finalizeAction(); } }
         function deleteTodo(id) { db.todos = db.todos.filter(x => x.id !== id); finalizeAction(); }
-        function renderDashTodos() { const c = document.getElementById('dashTodosList'); if(!c) return; c.innerHTML = ''; let todosToRender = db.todos.filter(t => t.date === todayStr); todosToRender.forEach(t => { c.innerHTML += `<div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px;"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})" style="width:18px; height:18px; cursor:pointer;"><span style="flex:1; font-weight:bold; ${t.done?'text-decoration:line-through; color:var(--text-light);':''}">${t.text}</span><button onclick="deleteTodo(${t.id})" style="background:none; border:none; color:var(--danger); cursor:pointer;">✖</button></div>`; }); if(c.innerHTML==='') c.innerHTML='<p style="color:var(--text-light); font-size:13px; padding-top:10px;">لا توجد مهام اليوم.</p>'; }
-        function renderFullTodos() { const c = document.getElementById('fullTodosContainer'); if(!c) return; c.innerHTML = ''; const grouped = {}; db.todos.forEach(t => { if(!grouped[t.date]) grouped[t.date] = []; grouped[t.date].push(t); }); const sortedDates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a)); sortedDates.forEach(date => { let dateLabel = date === todayStr ? 'اليوم' : new Date(date).toLocaleDateString('ar-EG'); let html = `<div class="date-group-header">📅 مهام ${dateLabel}</div>`; grouped[date].forEach(t => { html += `<div style="display:flex; align-items:center; gap:10px; padding:12px 10px; border-bottom:1px solid var(--border); background:var(--input-bg); border-radius:10px; margin-bottom:8px;"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})" style="width:18px; height:18px; cursor:pointer;"><span style="flex:1; font-weight:bold; ${t.done?'text-decoration:line-through; color:var(--text-light);':''}">${t.text}</span><button onclick="deleteTodo(${t.id})" style="background:rgba(244,63,94,0.1); border:none; color:var(--danger); border-radius:5px; padding:5px 10px; cursor:pointer; font-weight:bold;">حذف</button></div>`; }); c.innerHTML += html; }); if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light);">الأرشيف فارغ.</p>'; }
+        function renderDashTodos() { const c = document.getElementById('dashTodosList'); if(!c) return; c.innerHTML = ''; let todosToRender = db.todos.filter(t => t.date === todayStr); todosToRender.forEach(t => { c.innerHTML += `<div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px; word-break: break-word;"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})" style="width:18px; height:18px; cursor:pointer; flex-shrink:0;"><span style="flex:1; font-weight:bold; ${t.done?'text-decoration:line-through; color:var(--text-light);':''}">${t.text}</span><button onclick="deleteTodo(${t.id})" style="background:none; border:none; color:var(--danger); cursor:pointer; flex-shrink:0;">✖</button></div>`; }); if(c.innerHTML==='') c.innerHTML='<p style="color:var(--text-light); font-size:13px; padding-top:10px;">لا توجد مهام اليوم.</p>'; }
+        function renderFullTodos() { const c = document.getElementById('fullTodosContainer'); if(!c) return; c.innerHTML = ''; const grouped = {}; db.todos.forEach(t => { if(!grouped[t.date]) grouped[t.date] = []; grouped[t.date].push(t); }); const sortedDates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a)); sortedDates.forEach(date => { let dateLabel = date === todayStr ? 'اليوم' : new Date(date).toLocaleDateString('ar-EG'); let html = `<div class="date-group-header">📅 مهام ${dateLabel}</div>`; grouped[date].forEach(t => { html += `<div style="display:flex; align-items:center; gap:10px; padding:12px 10px; border-bottom:1px solid var(--border); background:var(--input-bg); border-radius:10px; margin-bottom:8px; word-break: break-word;"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})" style="width:18px; height:18px; cursor:pointer; flex-shrink:0;"><span style="flex:1; font-weight:bold; ${t.done?'text-decoration:line-through; color:var(--text-light);':''}">${t.text}</span><button onclick="deleteTodo(${t.id})" style="background:rgba(244,63,94,0.1); border:none; color:var(--danger); border-radius:5px; padding:5px 10px; cursor:pointer; font-weight:bold; flex-shrink:0;">حذف</button></div>`; }); c.innerHTML += html; }); if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light);">الأرشيف فارغ.</p>'; }
 
         function addExpenseDash(e) { e.preventDefault(); const desc = document.getElementById('expenseDescDash').value.trim(); const amount = document.getElementById('expenseAmountDash').value; if(!desc || !amount) return; db.expenses.push({ id: Date.now(), desc: desc, amount: amount, date: todayStr }); finalizeAction(); document.getElementById('expenseDescDash').value = ''; document.getElementById('expenseAmountDash').value = ''; }
         function deleteExpense(id) { db.expenses = db.expenses.filter(x => x.id !== id); finalizeAction(); }
-        function renderDashExpenses() { const c = document.getElementById('dashExpensesList'); if(!c) return; c.innerHTML = ''; let expensesToRender = db.expenses.filter(t => t.date === todayStr); let total = 0; expensesToRender.forEach(ex => { total += parseFloat(ex.amount); c.innerHTML += `<div style="display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px;"><div style="flex:1;"><strong>${ex.desc}</strong></div><div style="font-weight:bold; color:var(--danger);">${ex.amount} ₪</div><button onclick="deleteExpense(${ex.id})" style="background:none; border:none; color:var(--text-light); cursor:pointer; padding-right:15px; font-size:16px;">✖</button></div>`; }); if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light); font-size:13px; padding-top:10px;">لم تسجل مصاريف اليوم.</p>'; const totalEl = document.getElementById('dashExpensesTotal'); if(totalEl) totalEl.innerText = `${total} شيكل`; }
-        function renderExpenseStats() { let tDay = 0, tWeek = 0, tMonth = 0; const now = new Date(); const currentMonth = now.getMonth(); const currentYear = now.getFullYear(); db.expenses.forEach(ex => { const exDate = new Date(ex.date); const diffDays = (now - exDate) / (1000 * 60 * 60 * 24); if(ex.date === todayStr) tDay += parseFloat(ex.amount); if(diffDays <= 7) tWeek += parseFloat(ex.amount); if(exDate.getMonth() === currentMonth && exDate.getFullYear() === currentYear) tMonth += parseFloat(ex.amount); }); document.getElementById('statToday').innerText = tDay + ' ₪'; document.getElementById('statWeek').innerText = tWeek + ' ₪'; document.getElementById('statMonth').innerText = tMonth + ' ₪'; const c = document.getElementById('fullExpensesArchive'); c.innerHTML = ''; const grouped = {}; db.expenses.forEach(ex => { if(!grouped[ex.date]) grouped[ex.date] = []; grouped[ex.date].push(ex); }); const sortedDates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a)); sortedDates.forEach(date => { let dateLabel = date === todayStr ? 'اليوم' : new Date(date).toLocaleDateString('ar-EG'); let dayTotal = grouped[date].reduce((sum, item) => sum + parseFloat(item.amount), 0); let html = `<div class="date-group-header">📅 ${dateLabel} <span style="margin-right:10px; color:var(--danger);">(${dayTotal} ₪)</span></div>`; grouped[date].forEach(ex => { html += `<div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid var(--border); background:var(--input-bg); border-radius:10px; margin-bottom:8px;"><div style="font-weight:bold;">${ex.desc}</div><div style="display:flex; gap:15px; align-items:center;"><span style="color:var(--danger); font-weight:bold;">${ex.amount} ₪</span><button onclick="deleteExpense(${ex.id})" style="background:none; border:none; color:var(--text-light); cursor:pointer;">✖</button></div></div>`; }); c.innerHTML += html; }); if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light);">الأرشيف فارغ.</p>'; }
+        function renderDashExpenses() { const c = document.getElementById('dashExpensesList'); if(!c) return; c.innerHTML = ''; let expensesToRender = db.expenses.filter(t => t.date === todayStr); let total = 0; expensesToRender.forEach(ex => { total += parseFloat(ex.amount); c.innerHTML += `<div style="display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px; word-break: break-word;"><div style="flex:1; padding-left:10px;"><strong>${ex.desc}</strong></div><div style="font-weight:bold; color:var(--danger); flex-shrink:0;">${ex.amount} ₪</div><button onclick="deleteExpense(${ex.id})" style="background:none; border:none; color:var(--text-light); cursor:pointer; padding-right:15px; font-size:16px; flex-shrink:0;">✖</button></div>`; }); if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light); font-size:13px; padding-top:10px;">لم تسجل مصاريف اليوم.</p>'; const totalEl = document.getElementById('dashExpensesTotal'); if(totalEl) totalEl.innerText = `${total} شيكل`; }
+        function renderExpenseStats() { let tDay = 0, tWeek = 0, tMonth = 0; const now = new Date(); const currentMonth = now.getMonth(); const currentYear = now.getFullYear(); db.expenses.forEach(ex => { const exDate = new Date(ex.date); const diffDays = (now - exDate) / (1000 * 60 * 60 * 24); if(ex.date === todayStr) tDay += parseFloat(ex.amount); if(diffDays <= 7) tWeek += parseFloat(ex.amount); if(exDate.getMonth() === currentMonth && exDate.getFullYear() === currentYear) tMonth += parseFloat(ex.amount); }); document.getElementById('statToday').innerText = tDay + ' ₪'; document.getElementById('statWeek').innerText = tWeek + ' ₪'; document.getElementById('statMonth').innerText = tMonth + ' ₪'; const c = document.getElementById('fullExpensesArchive'); c.innerHTML = ''; const grouped = {}; db.expenses.forEach(ex => { if(!grouped[ex.date]) grouped[ex.date] = []; grouped[ex.date].push(ex); }); const sortedDates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a)); sortedDates.forEach(date => { let dateLabel = date === todayStr ? 'اليوم' : new Date(date).toLocaleDateString('ar-EG'); let dayTotal = grouped[date].reduce((sum, item) => sum + parseFloat(item.amount), 0); let html = `<div class="date-group-header">📅 ${dateLabel} <span style="margin-right:10px; color:var(--danger);">(${dayTotal} ₪)</span></div>`; grouped[date].forEach(ex => { html += `<div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid var(--border); background:var(--input-bg); border-radius:10px; margin-bottom:8px; word-break: break-word;"><div style="font-weight:bold; flex:1;">${ex.desc}</div><div style="display:flex; gap:15px; align-items:center; flex-shrink:0;"><span style="color:var(--danger); font-weight:bold;">${ex.amount} ₪</span><button onclick="deleteExpense(${ex.id})" style="background:none; border:none; color:var(--text-light); cursor:pointer;">✖</button></div></div>`; }); c.innerHTML += html; }); if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light);">الأرشيف فارغ.</p>'; }
 
         function toggleFields() { const type = document.getElementById('billType').value; document.getElementById('meterGroup').style.display = type === 'كهرباء' ? 'block' : 'none'; document.getElementById('titleGroup').style.display = type !== 'كهرباء' ? 'block' : 'none'; }
         function toggleVaultFields() { const type = document.getElementById('vaultType').value; document.getElementById('vaultNameLabel').innerText = type === 'إيميل' ? 'الإيميل:' : 'اسم الحساب:'; document.getElementById('vaultPlatformGroup').style.display = type === 'إيميل' ? 'none' : 'block'; document.getElementById('vaultNotesGroup').style.display = type === 'إيميل' ? 'block' : 'none'; }
@@ -390,7 +410,7 @@
             if(results.length === 0) { container.innerHTML = '<p style="color:var(--text-light);">لا توجد نتائج.</p>'; return; }
             results.forEach(res => {
                 let passStyle = res._type === 'vault' ? `background:var(--danger); color:white; padding:2px 6px; border-radius:4px; font-family:monospace;` : `color:var(--text-light);`;
-                container.innerHTML += `<div class="list-item" style="background:var(--card); padding:15px; border-radius:12px; margin-bottom:10px; border:1px solid var(--border);"><div style="flex:1;"><strong>${res._icon} ${res._title}</strong><br><span style="${passStyle} font-size:13px;">${res._sub1}</span></div><div style="display:flex; gap:5px;"><button onclick="editItem('${res._type}', ${res.id})" style="background:none; border:none; color:var(--primary); cursor:pointer;">✏️</button><button onclick="deleteItem('${res._type}', ${res.id})" style="background:none; border:none; color:var(--danger); cursor:pointer;">🗑</button></div></div>`;
+                container.innerHTML += `<div class="list-item" style="background:var(--card); padding:15px; border-radius:12px; margin-bottom:10px; border:1px solid var(--border); word-break: break-word;"><div style="flex:1;"><strong>${res._icon} ${res._title}</strong><br><span style="${passStyle} font-size:13px;">${res._sub1}</span></div><div style="display:flex; gap:5px; flex-shrink:0;"><button onclick="editItem('${res._type}', ${res.id})" style="background:none; border:none; color:var(--primary); cursor:pointer;">✏️</button><button onclick="deleteItem('${res._type}', ${res.id})" style="background:none; border:none; color:var(--danger); cursor:pointer;">🗑</button></div></div>`;
             });
         }
 
