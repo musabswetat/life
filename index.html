@@ -60,7 +60,7 @@
             -webkit-tap-highlight-color: transparent; 
         }
 
-        /* منع أشرطة التمرير كلياً */
+        /* منع أشرطة التمرير كلياً للمظهر النظيف */
         ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
         * { scrollbar-width: none !important; -ms-overflow-style: none !important; }
         
@@ -80,7 +80,7 @@
             position: relative;
         }
 
-        /* 🌟 القائمة الجانبية النظيفة بنمط iOS Glass */
+        /* 🌟 القائمة الجانبية */
         .sidebar-overlay { 
             display: none; 
             position: fixed; 
@@ -138,6 +138,13 @@
             background: rgba(0, 122, 255, 0.12); 
             color: var(--primary); 
             font-weight: 600; 
+        }
+        .sidebar button.voice-sidebar-btn {
+            color: var(--danger);
+        }
+        .sidebar button.voice-sidebar-btn:hover {
+            background: rgba(255, 59, 48, 0.12);
+            color: var(--danger);
         }
         .sidebar button span.icon { font-size: 19px; min-width: 28px; text-align: center; }
         .sidebar button span.text { opacity: 0; transition: opacity 0.2s; }
@@ -474,7 +481,7 @@
     <div id="syncStatus">☁️ جاري المزامنة...</div>
     <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
 
-    <!-- 🌟 القائمة الجانبية النظيفة -->
+    <!-- 🌟 القائمة الجانبية (مع إضافة زر التسجيل الصوتي للحاسوب) -->
     <div class="sidebar" id="mainSidebar">
         <div style="padding: 0 24px 20px 24px; font-weight: 800; font-size: 22px; color: var(--primary); width: 100%; display: none;" id="mobileSidebarTitle">Life OS</div>
         <button class="nav-btn active" onclick="showSection('dashboard')"><span class="icon">🏠</span><span class="text">الرئيسية</span></button>
@@ -483,6 +490,8 @@
         <button class="nav-btn" onclick="showSection('documents')"><span class="icon">🆔</span><span class="text">الوثائق</span></button>
         <button class="nav-btn" onclick="showSection('vault')"><span class="icon">🔐</span><span class="text">الخزنة</span></button>
         <button class="nav-btn" onclick="showSection('advanced-log')"><span class="icon">🔍</span><span class="text">البحث والسجل الشامل</span></button>
+        <!-- زر الملاحظة الصوتية المباشر في القائمة الجانبية -->
+        <button class="nav-btn voice-sidebar-btn" onclick="startVoiceNote()"><span class="icon">🎙️</span><span class="text">ملاحظة صوتية</span></button>
         
         <div style="margin-top: auto; width: 100%; border-top: 0.5px solid var(--border); padding-top: 10px;">
             <button onclick="toggleTheme()"><span class="icon" id="themeIconDesktop">🌙</span><span class="text">المظهر</span></button>
@@ -495,7 +504,13 @@
         
         <!-- 🍃 الرئيسية -->
         <div id="dashboard" class="section active">
-            <div class="dashboard-header">طاب يومك.</div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                <div class="dashboard-header">طاب يومك.</div>
+                <!-- زر صوتي سريع في رأس الشاشة الرئيسية للكمبيوتر والهاتف -->
+                <button onclick="startVoiceNote()" style="background: rgba(255,59,48,0.12); color: var(--danger); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <span>🎙️</span> تسجيل صوتي
+                </button>
+            </div>
             <div class="dashboard-subtitle">بياناتك آمنة ومتزامنة لحظياً عبر أجهزتك ☁️</div>
 
             <div class="card summary-card">
@@ -634,7 +649,12 @@
         </div>
         
         <div id="notes" class="section card">
-            <h2 style="font-weight: 800;">الملاحظات</h2><br>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h2 style="font-weight: 800;">الملاحظات</h2>
+                <button type="button" onclick="startVoiceNote()" style="background: rgba(255,59,48,0.12); color: var(--danger); border: none; padding: 6px 14px; border-radius: 16px; font-weight: 700; font-size: 13px; cursor: pointer;">
+                    🎙️ إملاء صوتي
+                </button>
+            </div>
             <form onsubmit="saveNote(event)">
                 <div class="form-group"><input type="text" id="noteTitle" placeholder="العنوان" style="font-weight:bold; border:none; background:var(--input-bg); font-size:17px;"></div>
                 <div class="form-group"><textarea id="noteBody" rows="4" placeholder="اكتب ملاحظتك هنا..." required style="border:none; resize:none; background:var(--input-bg);"></textarea></div>
@@ -784,7 +804,7 @@
             localStorage.setItem('myLifeAppDB', JSON.stringify(db));
         }
 
-        // --- 🎙️ نظام تحويل الصوت إلى نص المصلح بدقة وبدون تكرار ---
+        // --- 🎙️ محرك تحويل الصوت إلى نص المصلح بدقة ---
         let recognition = null;
         let finalVoiceTranscript = '';
 
@@ -795,7 +815,6 @@
             recognition.interimResults = true;
             recognition.lang = 'ar-SA';
 
-            // إعادة بناء النص كاملاً من البداية على كل حدث لتجنب التكرار
             recognition.onresult = (event) => {
                 let fullTranscript = '';
                 for (let i = 0; i < event.results.length; ++i) {
@@ -806,13 +825,13 @@
             };
 
             recognition.onerror = (event) => {
-                document.getElementById('voiceTranscriptText').innerText = '⚠️ حدث خطأ في التقاط الصوت: ' + event.error;
+                document.getElementById('voiceTranscriptText').innerText = '⚠️ خطأ في الميكروفون: ' + event.error;
             };
         }
 
         function startVoiceNote() {
             if (!recognition) {
-                alert('عذراً، متصفحك لا يدعم تحويل الصوت إلى نص مباشرة. يمكنك كتابة الملاحظة من الإضافة السريعة.');
+                alert('المتصفح الحالي لا يدعم تحويل الصوت إلى نص مباشرة. يرجى تجربة متصفح Chrome أو Edge أو إضافة الملاحظة كتابياً.');
                 return;
             }
             finalVoiceTranscript = '';
