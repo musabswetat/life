@@ -60,7 +60,6 @@
             -webkit-tap-highlight-color: transparent; 
         }
 
-        /* منع أشرطة التمرير كلياً للمظهر النظيف */
         ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
         * { scrollbar-width: none !important; -ms-overflow-style: none !important; }
         
@@ -245,7 +244,6 @@
         }
         .island-btn:active { transform: scale(0.9); }
 
-        /* زر التسجيل الصوتي */
         .island-voice-btn {
             width: 44px;
             height: 44px;
@@ -286,7 +284,6 @@
             box-shadow: 0 4px 14px rgba(255, 59, 48, 0.3);
         }
 
-        /* 📱 قائمة الخيارات المنبثقة من الكبسولة العائمة */
         .island-popup-menu {
             position: absolute;
             bottom: calc(100% + 14px);
@@ -329,7 +326,6 @@
         }
         .island-item:active { background: var(--primary); color: white; transform: scale(0.98); }
 
-        /* 🎙️ نافذة تسجيل الملاحظة الصوتية */
         .voice-modal-overlay {
             display: none;
             position: fixed;
@@ -429,7 +425,7 @@
                 right: -290px; 
                 width: 280px; 
                 height: 100vh; 
-                height: 100dvh;
+                height: 100dvh; 
                 padding-top: max(24px, env(safe-area-inset-top)); 
                 box-shadow: -10px 0 30px rgba(0,0,0,0.15); 
                 border-left: none; 
@@ -481,7 +477,7 @@
     <div id="syncStatus">☁️ جاري المزامنة...</div>
     <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
 
-    <!-- 🌟 القائمة الجانبية (مع إضافة زر التسجيل الصوتي للحاسوب) -->
+    <!-- 🌟 القائمة الجانبية -->
     <div class="sidebar" id="mainSidebar">
         <div style="padding: 0 24px 20px 24px; font-weight: 800; font-size: 22px; color: var(--primary); width: 100%; display: none;" id="mobileSidebarTitle">Life OS</div>
         <button class="nav-btn active" onclick="showSection('dashboard')"><span class="icon">🏠</span><span class="text">الرئيسية</span></button>
@@ -490,7 +486,6 @@
         <button class="nav-btn" onclick="showSection('documents')"><span class="icon">🆔</span><span class="text">الوثائق</span></button>
         <button class="nav-btn" onclick="showSection('vault')"><span class="icon">🔐</span><span class="text">الخزنة</span></button>
         <button class="nav-btn" onclick="showSection('advanced-log')"><span class="icon">🔍</span><span class="text">البحث والسجل الشامل</span></button>
-        <!-- زر الملاحظة الصوتية المباشر في القائمة الجانبية -->
         <button class="nav-btn voice-sidebar-btn" onclick="startVoiceNote()"><span class="icon">🎙️</span><span class="text">ملاحظة صوتية</span></button>
         
         <div style="margin-top: auto; width: 100%; border-top: 0.5px solid var(--border); padding-top: 10px;">
@@ -506,7 +501,6 @@
         <div id="dashboard" class="section active">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
                 <div class="dashboard-header">طاب يومك.</div>
-                <!-- زر صوتي سريع في رأس الشاشة الرئيسية للكمبيوتر والهاتف -->
                 <button onclick="startVoiceNote()" style="background: rgba(255,59,48,0.12); color: var(--danger); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                     <span>🎙️</span> تسجيل صوتي
                 </button>
@@ -689,12 +683,12 @@
 
     </div>
 
-    <!-- 🎙️ نافذة تسجيل الملاحظة الصوتية المباشرة -->
+    <!-- 🎙️ نافذة تسجيل الملاحظة الصوتية -->
     <div class="voice-modal-overlay" id="voiceModal">
         <div class="voice-modal">
             <div class="voice-pulse" id="voicePulseIcon">🎙️</div>
             <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;" id="voiceModalTitle">جاري الاستماع...</h3>
-            <p style="font-size: 13px; color: var(--text-light); margin-bottom: 16px;">تحدث باللغة العربية بوضوح وسيتم تدوين كلامك فوراً</p>
+            <p style="font-size: 13px; color: var(--text-light); margin-bottom: 16px;">تحدث باللغة العربية بوضوح وسيتم تدوين كلامك تلقائياً</p>
             <div id="voiceTranscriptText" style="min-height: 80px; max-height: 140px; overflow-y: auto; background: var(--input-bg); padding: 12px; border-radius: 16px; font-size: 15px; font-weight: 600; margin-bottom: 20px; text-align: right; color: var(--text); border: 0.5px solid var(--border);">...</div>
             <div style="display: flex; gap: 10px;">
                 <button onclick="stopAndSaveVoiceNote()" class="btn-submit" style="background: var(--success); flex: 1; padding: 12px;">✅ حفظ الملاحظة</button>
@@ -703,7 +697,7 @@
         </div>
     </div>
 
-    <!-- 🏝️ الكبسولة العائمة الذكية (iOS Floating Island Dock) -->
+    <!-- 🏝️ الكبسولة العائمة الذكية -->
     <div class="floating-island">
         <button class="island-btn" onclick="toggleMobileMenu()">☰</button>
         <button class="island-voice-btn" onclick="startVoiceNote()" title="تسجيل ملاحظة صوتية سريعة">🎙️</button>
@@ -804,7 +798,7 @@
             localStorage.setItem('myLifeAppDB', JSON.stringify(db));
         }
 
-        // --- 🎙️ محرك تحويل الصوت إلى نص المصلح بدقة ---
+        // --- 🎙️ محرك تحويل الصوت إلى نص الخالي من التكرار ---
         let recognition = null;
         let finalVoiceTranscript = '';
 
@@ -812,36 +806,47 @@
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
             recognition.continuous = true;
-            recognition.interimResults = true;
+            recognition.interimResults = false; // 🚫 منع التكرار تماماً بإلغاء النتائج التخمينية
             recognition.lang = 'ar-SA';
 
             recognition.onresult = (event) => {
                 let fullTranscript = '';
                 for (let i = 0; i < event.results.length; ++i) {
-                    fullTranscript += event.results[i][0].transcript;
+                    fullTranscript += event.results[i][0].transcript + ' ';
                 }
                 finalVoiceTranscript = fullTranscript.trim();
                 document.getElementById('voiceTranscriptText').innerText = finalVoiceTranscript || 'استمع الآن...';
             };
 
             recognition.onerror = (event) => {
-                document.getElementById('voiceTranscriptText').innerText = '⚠️ خطأ في الميكروفون: ' + event.error;
+                if (event.error === 'network') {
+                    document.getElementById('voiceTranscriptText').innerHTML = '⚠️ <strong>تعذر الاتصال بخدمة الصوت (Network Error)</strong><br><small style="font-size:12px; color:var(--text-light);">إذا كنت تستخدم متصفح Brave، فعّل خيار Google Voice Recognition من الإعدادات، أو استخدم متصفح Chrome/Edge.</small>';
+                } else if (event.error === 'not-allowed') {
+                    document.getElementById('voiceTranscriptText').innerText = '⚠️ يرجى السماح بصلاحية الميكروفون من إعدادات المتصفح.';
+                } else {
+                    document.getElementById('voiceTranscriptText').innerText = '⚠️ خطأ: ' + event.error;
+                }
             };
         }
 
         function startVoiceNote() {
             if (!recognition) {
-                alert('المتصفح الحالي لا يدعم تحويل الصوت إلى نص مباشرة. يرجى تجربة متصفح Chrome أو Edge أو إضافة الملاحظة كتابياً.');
+                alert('المتصفح الحالي لا يدعم ميزة التعرف على الصوت. يرجى استخدام متصفح Chrome أو Edge.');
                 return;
             }
             finalVoiceTranscript = '';
-            document.getElementById('voiceTranscriptText').innerText = 'استمع الآن...';
+            document.getElementById('voiceTranscriptText').innerText = 'استمع الآن... تحدث بوضوح';
             document.getElementById('voiceModal').classList.add('active');
             try {
-                recognition.start();
-            } catch (e) {
-                console.log(e);
-            }
+                recognition.abort();
+            } catch (e) {}
+            setTimeout(() => {
+                try {
+                    recognition.start();
+                } catch (e) {
+                    console.log(e);
+                }
+            }, 100);
         }
 
         function stopAndSaveVoiceNote() {
