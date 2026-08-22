@@ -4,60 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <!-- 🍏 إعدادات Apple PWA وتطبيق الويب الشامل -->
+    <!-- 🍏 Apple Web App & System UI Configuration -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="theme-color" content="#F2F2F7" id="themeColorMeta">
+    <meta name="theme-color" content="#F5F5F7" id="themeColorMeta">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2313/2313436.png">
     
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Life%20OS%22%2C%22short_name%22%3A%22Life%20OS%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%2F%22%2C%22background_color%22%3A%22%23F2F2F7%22%2C%22theme_color%22%3A%22%23F2F2F7%22%7D'>
+    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Life%20OS%22%2C%22short_name%22%3A%22Life%20OS%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%2F%22%2C%22background_color%22%3A%22%23F5F5F7%22%2C%22theme_color%22%3A%22%230071E3%22%7D'>
 
     <title>Life OS</title>
     
-    <!-- ☁️ مكتبات Firebase السحابية -->
+    <!-- ☁️ Firebase Cloud Core -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
-        /* 🎨 لوحة ألوان Apple iOS الرسمية */
+        /* 🎨 Apple Design System (Cupertino / VisionOS Design Language) */
         :root { 
-            --primary: #007AFF; 
-            --primary-hover: #0056b3; 
-            --bg: #F2F2F7; 
-            --card: rgba(255, 255, 255, 0.85); 
-            --card-solid: #FFFFFF;
-            --text: #000000; 
-            --text-light: #8E8E93; 
-            --danger: #FF3B30; 
-            --success: #34C759; 
-            --warning: #FF9500; 
-            --border: rgba(60, 60, 67, 0.12); 
-            --input-bg: rgba(118, 118, 128, 0.12); 
-            --glass-blur: blur(25px) saturate(180%);
-            --island-bg: rgba(255, 255, 255, 0.88);
-            --island-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+            --apple-blue: #0071E3;
+            --apple-blue-hover: #0077ED;
+            --apple-green: #34C759;
+            --apple-red: #FF3B30;
+            --apple-orange: #FF9500;
+            --apple-purple: #AF52DE;
+            
+            --bg: #F5F5F7;
+            --card-bg: #FFFFFF;
+            --card-glass: rgba(255, 255, 255, 0.72);
+            --card-hover: #FAFAFC;
+            
+            --text-primary: #1D1D1F;
+            --text-secondary: #86868B;
+            --text-tertiary: #A1A1A6;
+            
+            --border-light: rgba(0, 0, 0, 0.06);
+            --border-highlight: rgba(0, 0, 0, 0.08);
+            --input-fill: #E8E8ED;
+            
+            --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+            --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+            
+            --glass-filter: blur(30px) saturate(190%);
+            --radius-lg: 26px;
+            --radius-md: 18px;
+            --radius-sm: 12px;
+            --radius-pill: 9999px;
+            
+            --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         body.dark-mode { 
-            --primary: #0A84FF; 
-            --primary-hover: #007AFF; 
-            --bg: #000000; 
-            --card: rgba(28, 28, 30, 0.85); 
-            --card-solid: #1C1C1E;
-            --text: #FFFFFF; 
-            --text-light: #8E8E93; 
-            --border: rgba(84, 84, 88, 0.36); 
-            --input-bg: rgba(118, 118, 128, 0.24); 
-            --island-bg: rgba(30, 30, 32, 0.88);
-            --island-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+            --apple-blue: #2997FF;
+            --apple-blue-hover: #0071E3;
+            --apple-green: #30D158;
+            --apple-red: #FF453A;
+            --apple-orange: #FF9F0A;
+            
+            --bg: #000000;
+            --card-bg: #161617;
+            --card-glass: rgba(22, 22, 23, 0.78);
+            --card-hover: #1D1D1F;
+            
+            --text-primary: #F5F5F7;
+            --text-secondary: #86868B;
+            --text-tertiary: #6E6E73;
+            
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 255, 255, 0.12);
+            --input-fill: #242426;
+            
+            --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+            --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+            --shadow-float: 0 20px 45px rgba(0, 0, 0, 0.7);
         }
         
         * { 
             box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, sans-serif; 
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif; 
             -webkit-tap-highlight-color: transparent; 
+            letter-spacing: -0.015em;
         }
 
         ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
@@ -72,14 +101,14 @@
             width: 100%; 
             min-height: 100vh; 
             background-color: var(--bg) !important; 
-            color: var(--text) !important; 
+            color: var(--text-primary) !important; 
             display: flex; 
-            transition: background-color 0.3s ease, color 0.3s ease; 
+            transition: background-color 0.4s ease, color 0.4s ease; 
             overflow-x: hidden;
             position: relative;
         }
 
-        /* 🌟 القائمة الجانبية */
+        /* 🌟 Apple macOS / iPadOS Translucent Sidebar */
         .sidebar-overlay { 
             display: none; 
             position: fixed; 
@@ -87,26 +116,26 @@
             right: 0; 
             width: 100%; 
             height: 100%; 
-            background: rgba(0,0,0,0.35); 
-            backdrop-filter: blur(6px); 
-            -webkit-backdrop-filter: blur(6px);
+            background: rgba(0,0,0,0.3); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
             z-index: 1001; 
             opacity: 0; 
             transition: opacity 0.3s ease; 
         }
         .sidebar { 
             width: 80px; 
-            background: var(--card); 
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border-left: 0.5px solid var(--border); 
+            background: var(--card-glass); 
+            backdrop-filter: var(--glass-filter);
+            -webkit-backdrop-filter: var(--glass-filter);
+            border-left: 0.5px solid var(--border-light); 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            padding: 24px 0 100px 0; 
-            gap: 8px; 
+            padding: 30px 0 120px 0; 
+            gap: 10px; 
             z-index: 1002; 
-            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             flex-shrink: 0;
@@ -114,126 +143,175 @@
             position: sticky;
             top: 0;
         }
-        .sidebar:hover { width: 240px; }
+        .sidebar:hover { width: 250px; }
         .sidebar button { 
-            width: 90%; 
-            padding: 12px 14px; 
+            width: 88%; 
+            padding: 13px 15px; 
             border: none; 
             background: transparent; 
-            color: var(--text-light); 
+            color: var(--text-secondary); 
             text-align: right; 
             font-size: 15px; 
             font-weight: 500;
             cursor: pointer; 
-            border-radius: 14px; 
-            transition: all 0.2s ease; 
+            border-radius: var(--radius-md); 
+            transition: var(--transition-smooth); 
             display: flex; 
             align-items: center; 
             gap: 14px; 
             white-space: nowrap; 
             flex-shrink: 0;
         }
-        .sidebar button:hover, .sidebar button.active { 
-            background: rgba(0, 122, 255, 0.12); 
-            color: var(--primary); 
+        .sidebar button:hover { 
+            background: var(--input-fill); 
+            color: var(--text-primary); 
+        }
+        .sidebar button.active { 
+            background: var(--apple-blue); 
+            color: #FFFFFF !important; 
             font-weight: 600; 
+            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
         }
-        .sidebar button.voice-sidebar-btn {
-            color: var(--danger);
-        }
-        .sidebar button.voice-sidebar-btn:hover {
-            background: rgba(255, 59, 48, 0.12);
-            color: var(--danger);
-        }
-        .sidebar button span.icon { font-size: 19px; min-width: 28px; text-align: center; }
-        .sidebar button span.text { opacity: 0; transition: opacity 0.2s; }
+        .sidebar button.voice-sidebar-btn { color: var(--apple-red); }
+        .sidebar button.voice-sidebar-btn:hover { background: rgba(255, 59, 48, 0.12); color: var(--apple-red); }
+        .sidebar button span.icon { font-size: 20px; min-width: 28px; text-align: center; }
+        .sidebar button span.text { opacity: 0; transition: opacity 0.2s ease; }
         .sidebar:hover button span.text { opacity: 1; }
 
-        /* 📱 حاوية المحتوى الرئيسية */
+        /* 📱 Bento Grid Container */
         .main-container {
             flex: 1;
             width: 100%;
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
-            padding: 24px 16px 140px 16px; 
+            padding: 36px 20px 140px 20px; 
             box-sizing: border-box;
             min-height: 100vh;
         }
 
-        .section { display: none; animation: fadeIn 0.25s ease-out; width: 100%; }
+        .section { display: none; animation: appleAppear 0.35s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
         .section.active { display: block; }
         
+        /* 📦 Apple Bento Box Cards */
         .card { 
-            background: var(--card-solid); 
-            padding: 22px; 
-            border-radius: 22px; 
-            margin-bottom: 18px; 
-            border: 0.5px solid var(--border); 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02); 
+            background: var(--card-bg); 
+            padding: 26px; 
+            border-radius: var(--radius-lg); 
+            margin-bottom: 20px; 
+            border: 1px solid var(--border-light); 
+            box-shadow: var(--shadow-card); 
             width: 100%; 
             box-sizing: border-box; 
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
         }
-        .dashboard-header { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; color: var(--text); }
-        .dashboard-subtitle { color: var(--text-light); font-size: 14px; font-weight: 500; margin-bottom: 22px; }
+        .card:hover {
+            border-color: var(--border-highlight);
+        }
+
+        .dashboard-header { 
+            font-size: 38px; 
+            font-weight: 800; 
+            letter-spacing: -0.03em; 
+            line-height: 1.1; 
+            color: var(--text-primary); 
+        }
+        .dashboard-subtitle { 
+            color: var(--text-secondary); 
+            font-size: 15px; 
+            font-weight: 400; 
+            margin-top: 6px; 
+            margin-bottom: 28px; 
+        }
         
-        .summary-card { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            flex-wrap: wrap; 
-            gap: 15px; 
-            background: linear-gradient(135deg, var(--card-solid) 0%, var(--input-bg) 100%);
+        /* Bento Hero Highlight */
+        .hero-bento {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--input-fill) 100%);
+            border: 1px solid var(--border-highlight);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 30px;
         }
+        .hero-bento .badge-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+        .hero-bento .hero-price {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text-primary);
+        }
+        .hero-bento .hero-price span {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
         .dashboard-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 16px; 
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); 
+            gap: 20px; 
             width: 100%; 
         }
         
-        .dash-form { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; }
+        /* 🖋️ Apple Input Styles */
+        .dash-form { display: flex; gap: 10px; margin-bottom: 16px; width: 100%; }
         .dash-input { 
-            padding: 14px 16px; 
-            border-radius: 14px; 
-            border: none; 
-            background: var(--input-bg) !important; 
-            color: var(--text) !important; 
+            padding: 15px 18px; 
+            border-radius: var(--radius-md); 
+            border: 1px solid transparent; 
+            background: var(--input-fill) !important; 
+            color: var(--text-primary) !important; 
             flex: 1; 
             font-size: 15px; 
             outline: none; 
             min-width: 0; 
             width: 100%; 
-            transition: all 0.2s ease;
+            transition: var(--transition-smooth);
         }
-        .dash-input:focus { box-shadow: 0 0 0 2px var(--primary); }
+        .dash-input:focus { 
+            border-color: var(--apple-blue); 
+            background: var(--card-bg) !important;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15);
+        }
+        .dash-input::placeholder { color: var(--text-tertiary); }
 
-        /* 🏝️ الكبسولة العائمة الذكية */
+        /* 🏝️ Apple VisionOS / Dynamic Island Floating Bar */
         .floating-island {
             position: fixed;
-            bottom: 24px;
+            bottom: 28px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--island-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 0.5px solid var(--border);
-            padding: 6px 10px;
-            border-radius: 40px;
-            box-shadow: var(--island-shadow);
+            background: var(--card-glass);
+            backdrop-filter: var(--glass-filter);
+            -webkit-backdrop-filter: var(--glass-filter);
+            border: 1px solid var(--border-highlight);
+            padding: 7px 12px;
+            border-radius: var(--radius-pill);
+            box-shadow: var(--shadow-float);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             z-index: 1000;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: var(--transition-smooth);
         }
 
         .island-btn {
             width: 44px;
             height: 44px;
-            border-radius: 50%;
-            background: var(--input-bg);
+            border-radius: var(--radius-pill);
+            background: var(--input-fill);
             border: none;
-            color: var(--text);
+            color: var(--text-primary);
             font-size: 18px;
             display: flex;
             justify-content: center;
@@ -242,67 +320,71 @@
             transition: transform 0.15s ease, background 0.2s ease;
             flex-shrink: 0;
         }
-        .island-btn:active { transform: scale(0.9); }
+        .island-btn:hover { background: var(--border-highlight); }
+        .island-btn:active { transform: scale(0.92); }
 
         .island-voice-btn {
             width: 44px;
             height: 44px;
-            border-radius: 50%;
+            border-radius: var(--radius-pill);
             background: rgba(255, 59, 48, 0.12);
-            color: var(--danger);
+            color: var(--apple-red);
             border: none;
-            font-size: 19px;
+            font-size: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: var(--transition-smooth);
             flex-shrink: 0;
         }
-        .island-voice-btn:active { transform: scale(0.9); background: var(--danger); color: white; }
+        .island-voice-btn:hover { background: var(--apple-red); color: #FFF; }
+        .island-voice-btn:active { transform: scale(0.92); }
 
         .island-action-btn {
-            background: var(--primary);
-            color: white;
+            background: var(--apple-blue);
+            color: #FFFFFF;
             border: none;
-            padding: 0 20px;
+            padding: 0 22px;
             height: 44px;
-            border-radius: 30px;
+            border-radius: var(--radius-pill);
             font-size: 15px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.3);
-            transition: transform 0.15s ease, background 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 113, 227, 0.35);
+            transition: var(--transition-smooth);
             white-space: nowrap;
         }
-        .island-action-btn:active { transform: scale(0.95); }
+        .island-action-btn:hover { background: var(--apple-blue-hover); transform: translateY(-1px); }
+        .island-action-btn:active { transform: scale(0.96); }
         .island-action-btn.active {
-            background: var(--danger);
-            box-shadow: 0 4px 14px rgba(255, 59, 48, 0.3);
+            background: var(--apple-red);
+            box-shadow: 0 4px 14px rgba(255, 59, 48, 0.35);
         }
 
+        /* 📱 Action Sheet Menu */
         .island-popup-menu {
             position: absolute;
-            bottom: calc(100% + 14px);
+            bottom: calc(100% + 16px);
             left: 50%;
-            transform: translateX(-50%) scale(0.9);
-            background: var(--island-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 0.5px solid var(--border);
-            border-radius: 24px;
+            transform: translateX(-50%) scale(0.92);
+            background: var(--card-glass);
+            backdrop-filter: var(--glass-filter);
+            -webkit-backdrop-filter: var(--glass-filter);
+            border: 1px solid var(--border-highlight);
+            border-radius: 26px;
             padding: 10px;
-            box-shadow: var(--island-shadow);
+            box-shadow: var(--shadow-float);
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            width: 260px;
+            transition: var(--transition-smooth);
+            width: 270px;
         }
         .island-popup-menu.open {
             opacity: 1;
@@ -314,111 +396,121 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            background: var(--input-bg);
+            background: var(--input-fill);
             border: none;
-            padding: 13px;
-            border-radius: 16px;
+            padding: 14px;
+            border-radius: var(--radius-md);
             cursor: pointer;
-            color: var(--text);
-            font-size: 14px;
+            color: var(--text-primary);
+            font-size: 15px;
             font-weight: 600;
-            transition: all 0.15s ease;
+            transition: var(--transition-smooth);
         }
-        .island-item:active { background: var(--primary); color: white; transform: scale(0.98); }
+        .island-item:hover { background: var(--apple-blue); color: #FFFFFF; }
+        .island-item:active { transform: scale(0.97); }
 
-        /* 🎙️ نافذة تسجيل الملاحظة الصوتية */
+        /* 🎙️ Siri / Voice Intelligence Glowing Aura Modal */
         .voice-modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 99999;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
-        .voice-modal-overlay.active { display: flex; animation: fadeIn 0.2s ease-out; }
+        .voice-modal-overlay.active { display: flex; animation: appleAppear 0.3s ease-out; }
         .voice-modal {
-            background: var(--card-solid);
+            background: var(--card-bg);
             width: 100%;
-            max-width: 380px;
-            border-radius: 28px;
-            padding: 26px;
+            max-width: 400px;
+            border-radius: 32px;
+            padding: 32px 26px;
             text-align: center;
-            border: 0.5px solid var(--border);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-highlight);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            position: relative;
         }
-        .voice-pulse {
-            width: 70px; height: 70px;
+        .voice-aura {
+            width: 80px; height: 80px;
             border-radius: 50%;
-            background: rgba(255, 59, 48, 0.15);
-            color: var(--danger);
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple), var(--apple-red));
             display: flex; align-items: center; justify-content: center;
-            font-size: 30px; margin: 0 auto 16px auto;
-            animation: pulse-ring 1.5s infinite;
+            font-size: 34px; margin: 0 auto 20px auto;
+            color: #FFF;
+            box-shadow: 0 0 35px rgba(0, 113, 227, 0.45);
+            animation: siriPulse 2s infinite ease-in-out;
         }
-        @keyframes pulse-ring {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.5); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 16px rgba(255, 59, 48, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+        @keyframes siriPulse {
+            0% { transform: scale(0.96); filter: brightness(1); }
+            50% { transform: scale(1.08); filter: brightness(1.25); box-shadow: 0 0 45px rgba(175, 82, 222, 0.6); }
+            100% { transform: scale(0.96); filter: brightness(1); }
         }
 
-        @media screen and (max-height: 480px) { .floating-island { display: none !important; } }
-        
-        .form-group { margin-bottom: 18px; width: 100%; } 
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text); font-size: 14px; } 
+        /* 📋 Form Components */
+        .form-group { margin-bottom: 20px; width: 100%; } 
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-secondary); font-size: 13px; text-transform: uppercase; letter-spacing: 0.03em; } 
         .form-group input, .form-group select, .form-group textarea { 
             width: 100%; 
-            padding: 15px 16px; 
-            background: var(--input-bg) !important; 
-            color: var(--text) !important; 
-            border: 0.5px solid var(--border); 
-            border-radius: 16px; 
+            padding: 16px 18px; 
+            background: var(--input-fill) !important; 
+            color: var(--text-primary) !important; 
+            border: 1px solid transparent; 
+            border-radius: var(--radius-md); 
             font-size: 15px; 
             outline: none; 
+            transition: var(--transition-smooth);
         } 
-        .form-group input:focus { border-color: var(--primary); } 
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
+            border-color: var(--apple-blue); 
+            background: var(--card-bg) !important;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15);
+        } 
         .btn-submit { 
-            background: var(--primary); 
+            background: var(--apple-blue); 
             color: white; 
             border: none; 
-            padding: 15px 20px; 
-            border-radius: 16px; 
+            padding: 16px 24px; 
+            border-radius: var(--radius-md); 
             cursor: pointer; 
             font-size: 16px; 
-            font-weight: 700; 
+            font-weight: 600; 
             width: 100%; 
-            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.25);
+            box-shadow: 0 4px 14px rgba(0, 113, 227, 0.3);
+            transition: var(--transition-smooth);
         }
+        .btn-submit:hover { background: var(--apple-blue-hover); transform: translateY(-1px); }
         .btn-submit:active { transform: scale(0.98); }
         
-        .zen-progress-bg { background: var(--input-bg); height: 7px; border-radius: 10px; overflow: hidden; margin-top: 8px; } 
-        .zen-progress-fill { background: var(--primary); height: 100%; border-radius: 10px; transition: width 0.4s ease; }
+        .zen-progress-bg { background: var(--input-fill); height: 8px; border-radius: var(--radius-pill); overflow: hidden; margin-top: 10px; } 
+        .zen-progress-fill { background: var(--apple-blue); height: 100%; border-radius: var(--radius-pill); transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         
         .date-group-header { 
-            background: var(--input-bg); 
-            padding: 6px 12px; 
-            border-radius: 10px; 
+            background: var(--input-fill); 
+            padding: 6px 14px; 
+            border-radius: var(--radius-pill); 
             font-weight: 700; 
             font-size: 12px; 
-            color: var(--text-light); 
-            margin: 18px 0 10px 0; 
+            color: var(--text-secondary); 
+            margin: 20px 0 12px 0; 
             display: inline-block; 
         }
         .list-item { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 14px 0; 
-            border-bottom: 0.5px solid var(--border); 
+            padding: 16px 0; 
+            border-bottom: 1px solid var(--border-light); 
             font-size: 15px; 
-            gap: 10px; 
+            gap: 12px; 
             word-break: break-word;
         } 
         .list-item:last-child { border-bottom: none; }
         
+        /* 📱 Responsive Adjustments */
         @media (max-width: 768px) { 
             .sidebar { 
                 position: fixed; 
@@ -426,40 +518,44 @@
                 right: -290px; 
                 width: 280px; 
                 height: 100vh; 
-                height: 100dvh; 
-                padding-top: max(24px, env(safe-area-inset-top)); 
-                box-shadow: -10px 0 30px rgba(0,0,0,0.15); 
+                padding-top: max(30px, env(safe-area-inset-top)); 
+                box-shadow: -15px 0 40px rgba(0,0,0,0.25); 
                 border-left: none; 
                 align-items: flex-start; 
                 z-index: 1002;
             } 
             .sidebar.open { right: 0; } 
-            .sidebar button { width: 100%; border-radius: 0; padding: 18px 24px; font-size: 16px; } 
+            .sidebar button { width: 100%; border-radius: 0; padding: 18px 26px; font-size: 16px; } 
             .sidebar button span.text { opacity: 1; } 
             .sidebar-overlay { display: block; pointer-events: none; } 
             .sidebar-overlay.show { opacity: 1; pointer-events: auto; } 
-            .main-container { padding: 16px 14px 120px 14px; } 
-            .card { padding: 18px; margin-bottom: 14px; border-radius: 20px; } 
-            .dashboard-header { font-size: 26px; }
+            .main-container { padding: 20px 16px 130px 16px; } 
+            .card { padding: 22px; margin-bottom: 16px; border-radius: var(--radius-lg); } 
+            .dashboard-header { font-size: 30px; }
             .dashboard-grid { grid-template-columns: 1fr; } 
             .dash-form { flex-direction: column; } 
-            .summary-card { flex-direction: column; align-items: flex-start; }
+            .hero-bento { padding: 22px; }
         }
         @media (min-width: 769px) { 
             .island-btn[onclick="toggleMobileMenu()"] { display: none; } 
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes appleAppear { 
+            from { opacity: 0; transform: translateY(10px) scale(0.98); } 
+            to { opacity: 1; transform: translateY(0) scale(1); } 
+        }
         
         #syncStatus { 
             position: fixed; 
-            top: max(14px, env(safe-area-inset-top)); 
-            left: 14px; 
-            background: rgba(0, 0, 0, 0.75); 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: white; 
-            padding: 6px 14px; 
-            border-radius: 20px; 
+            top: max(16px, env(safe-area-inset-top)); 
+            left: 16px; 
+            background: var(--card-glass); 
+            backdrop-filter: var(--glass-filter);
+            -webkit-backdrop-filter: var(--glass-filter);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary); 
+            padding: 7px 16px; 
+            border-radius: var(--radius-pill); 
             font-size: 12px; 
             z-index: 9999; 
             display: flex; 
@@ -468,6 +564,7 @@
             opacity: 0; 
             transition: opacity 0.3s ease; 
             font-weight: 600; 
+            box-shadow: var(--shadow-subtle);
             pointer-events: none;
         }
         #syncStatus.show { opacity: 1; }
@@ -478,9 +575,9 @@
     <div id="syncStatus">☁️ جاري المزامنة...</div>
     <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
 
-    <!-- 🌟 القائمة الجانبية -->
+    <!-- 🌟 Apple Side Navigation -->
     <div class="sidebar" id="mainSidebar">
-        <div style="padding: 0 24px 20px 24px; font-weight: 800; font-size: 22px; color: var(--primary); width: 100%; display: none;" id="mobileSidebarTitle">Life OS</div>
+        <div style="padding: 0 26px 24px 26px; font-weight: 800; font-size: 24px; color: var(--apple-blue); width: 100%; display: none;" id="mobileSidebarTitle">Life OS</div>
         <button class="nav-btn active" onclick="showSection('dashboard')"><span class="icon">🏠</span><span class="text">الرئيسية</span></button>
         <button class="nav-btn" onclick="showSection('expenses-stats')"><span class="icon">📊</span><span class="text">الإحصائيات والمصاريف</span></button>
         <button class="nav-btn" onclick="showSection('todos')"><span class="icon">✅</span><span class="text">أرشيف المهام</span></button>
@@ -489,37 +586,43 @@
         <button class="nav-btn" onclick="showSection('advanced-log')"><span class="icon">🔍</span><span class="text">البحث والسجل الشامل</span></button>
         <button class="nav-btn voice-sidebar-btn" onclick="startVoiceNote()"><span class="icon">🎙️</span><span class="text">ملاحظة صوتية</span></button>
         
-        <div style="margin-top: auto; width: 100%; border-top: 0.5px solid var(--border); padding-top: 10px;">
+        <div style="margin-top: auto; width: 100%; border-top: 1px solid var(--border-light); padding-top: 12px;">
             <button onclick="toggleTheme()"><span class="icon" id="themeIconDesktop">🌙</span><span class="text">المظهر</span></button>
             <button onclick="showSection('settings')"><span class="icon">⚙️</span><span class="text">الأمان والإعدادات</span></button>
         </div>
     </div>
 
-    <!-- 📱 منطقة المحتوى الرئيسية -->
+    <!-- 📱 Bento Main Interface -->
     <div class="main-container">
         
-        <!-- 🍃 الرئيسية -->
+        <!-- 🍃 Dashboard Bento Layout -->
         <div id="dashboard" class="section active">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
-                <div class="dashboard-header">طاب يومك.</div>
-                <button onclick="startVoiceNote()" style="background: rgba(255,59,48,0.12); color: var(--danger); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-                    <span>🎙️</span> تسجيل صوتي
+                <div>
+                    <div class="dashboard-header">طاب يومك.</div>
+                    <div class="dashboard-subtitle">نظام الإدارة الحياتي الشخصي والمزامنة السحابية ☁️</div>
+                </div>
+                <button onclick="startVoiceNote()" style="background: rgba(255, 59, 48, 0.1); color: var(--apple-red); border: none; padding: 10px 18px; border-radius: var(--radius-pill); font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition-smooth);">
+                    <span>🎙️</span> إملاء فوري
                 </button>
             </div>
-            <div class="dashboard-subtitle">بياناتك آمنة ومتزامنة لحظياً عبر أجهزتك ☁️</div>
 
-            <div class="card summary-card">
-                <div style="width: 100%;">
-                    <div style="color: var(--text-light); font-size: 14px; font-weight: 600; margin-bottom: 4px;">دُفِعَ هذا الشهر (فواتير، اشتراكات، مصروفات)</div>
-                    <div style="font-size: 34px; font-weight: 800; letter-spacing: -0.5px; color: var(--text);" id="dashSpent">0 <span style="font-size:16px; color:var(--text-light); font-weight:500;">شيكل</span></div>
+            <!-- Bento Hero Summary Card -->
+            <div class="card hero-bento">
+                <div>
+                    <div class="badge-title">إجمالي مدفوعات هذا الشهر</div>
+                    <div class="hero-price" id="dashSpent">0 <span>شيكل</span></div>
                 </div>
-                <div id="dashAlerts" style="font-size: 13px; font-weight: 600; width: 100%;"></div>
+                <div id="dashAlerts" style="font-size: 13px; font-weight: 600;"></div>
             </div>
 
             <div class="dashboard-grid">
-                <!-- المهام -->
+                <!-- المهام اليومية -->
                 <div class="card" style="margin-bottom: 0;">
-                    <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 16px; color: var(--text);">✅ مهام اليوم</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 18px;">
+                        <h3 style="font-size: 18px; font-weight: 700;">✅ مهام اليوم</h3>
+                        <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">تركيز مستمر</span>
+                    </div>
                     <form onsubmit="addTodoDash(event)" class="dash-form">
                         <input type="text" id="todoInputDash" placeholder="أضف مهمة للقيام بها اليوم..." required class="dash-input">
                         <button type="submit" style="display:none;"></button>
@@ -529,21 +632,27 @@
 
                 <!-- المصروفات اليومية -->
                 <div class="card" style="margin-bottom: 0;">
-                    <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 16px; color: var(--text);">💸 مصروفات اليوم</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 18px;">
+                        <h3 style="font-size: 18px; font-weight: 700;">💸 مصروفات اليوم</h3>
+                        <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">تدوين سريع</span>
+                    </div>
                     <form onsubmit="addExpenseDash(event)" class="dash-form">
                         <input type="text" id="expenseDescDash" placeholder="ماذا اشتريت؟" required class="dash-input">
                         <input type="number" id="expenseAmountDash" placeholder="المبلغ" required class="dash-input">
                         <button type="submit" style="display:none;"></button> 
                     </form>
                     <div id="dashExpensesList" style="width: 100%;"></div>
-                    <div style="margin-top:14px; padding-top:12px; border-top:0.5px solid var(--border); display:flex; justify-content:space-between; font-size:15px; font-weight:700; color:var(--text); width: 100%;">
-                        <span>صرف اليوم:</span> <span id="dashExpensesTotal" style="color:var(--danger);">0 شيكل</span>
+                    <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border-light); display:flex; justify-content:space-between; font-size:15px; font-weight:700; width: 100%;">
+                        <span>صرف اليوم:</span> <span id="dashExpensesTotal" style="color:var(--apple-red);">0 شيكل</span>
                     </div>
                 </div>
 
                 <!-- الاشتراكات الفعالة -->
                 <div class="card" style="margin-bottom: 0;">
-                    <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 16px; color: var(--primary);">🔁 الاشتراكات الفعالة</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 18px;">
+                        <h3 style="font-size: 18px; font-weight: 700; color: var(--apple-blue);">🔁 الاشتراكات النشطة</h3>
+                        <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">تجديد تلقائي</span>
+                    </div>
                     <div id="dashActiveSubs" style="width: 100%;"></div>
                 </div>
             </div>
@@ -551,49 +660,61 @@
 
         <!-- 📊 الإحصائيات -->
         <div id="expenses-stats" class="section">
-            <h2 style="margin-bottom: 16px; font-weight: 800;">📊 إحصائيات وأرشيف المصاريف</h2>
-            <div class="dashboard-grid" style="margin-bottom: 20px;">
-                <div class="card" style="margin-bottom:0; text-align:center; padding:18px;"><div style="font-size:13px; font-weight:600; color:var(--text-light);">صرف اليوم</div><div style="font-size:26px; font-weight:800; color:var(--text); margin-top:4px;" id="statToday">0</div></div>
-                <div class="card" style="margin-bottom:0; text-align:center; padding:18px;"><div style="font-size:13px; font-weight:600; color:var(--text-light);">صرف آخر 7 أيام</div><div style="font-size:26px; font-weight:800; color:var(--warning); margin-top:4px;" id="statWeek">0</div></div>
-                <div class="card" style="margin-bottom:0; text-align:center; padding:18px;"><div style="font-size:13px; font-weight:600; color:var(--text-light);">صرف هذا الشهر</div><div style="font-size:26px; font-weight:800; color:var(--danger); margin-top:4px;" id="statMonth">0</div></div>
+            <h2 style="margin-bottom: 20px; font-weight: 800; font-size: 28px;">📊 إحصائيات وأرشيف المصاريف</h2>
+            <div class="dashboard-grid" style="margin-bottom: 24px;">
+                <div class="card" style="margin-bottom:0; text-align:center; padding:22px;">
+                    <div style="font-size:13px; font-weight:600; color:var(--text-secondary);">صرف اليوم</div>
+                    <div style="font-size:28px; font-weight:800; color:var(--text-primary); margin-top:6px;" id="statToday">0</div>
+                </div>
+                <div class="card" style="margin-bottom:0; text-align:center; padding:22px;">
+                    <div style="font-size:13px; font-weight:600; color:var(--text-secondary);">صرف آخر 7 أيام</div>
+                    <div style="font-size:28px; font-weight:800; color:var(--apple-orange); margin-top:6px;" id="statWeek">0</div>
+                </div>
+                <div class="card" style="margin-bottom:0; text-align:center; padding:22px;">
+                    <div style="font-size:13px; font-weight:600; color:var(--text-secondary);">صرف هذا الشهر</div>
+                    <div style="font-size:28px; font-weight:800; color:var(--apple-red); margin-top:6px;" id="statMonth">0</div>
+                </div>
             </div>
-            <div class="card"><h3 style="font-weight:700;">أرشيف المصروفات (مرتب حسب التاريخ)</h3><div id="fullExpensesArchive" style="margin-top: 14px; width: 100%;"></div></div>
+            <div class="card"><h3 style="font-weight:700; margin-bottom: 6px;">سجل المصروفات الزمني</h3><div id="fullExpensesArchive" style="margin-top: 14px; width: 100%;"></div></div>
         </div>
 
         <!-- ✅ المهام (أرشيف) -->
-        <div id="todos" class="section card"><h2 style="font-weight: 800;">✅ أرشيف المهام</h2><div id="fullTodosContainer" style="width: 100%; margin-top: 10px;"></div></div>
+        <div id="todos" class="section card">
+            <h2 style="font-weight: 800; font-size: 28px; margin-bottom: 12px;">✅ أرشيف المهام</h2>
+            <div id="fullTodosContainer" style="width: 100%;"></div>
+        </div>
 
         <!-- الوثائق الرسمية -->
         <div id="documents" class="section card">
-            <h2 style="font-weight: 800;">الوثائق الرسمية</h2><br>
+            <h2 style="font-weight: 800; font-size: 28px; margin-bottom: 18px;">الوثائق والبطاقات</h2>
             <form onsubmit="saveDocument(event)">
-                <div class="form-group"><label>اسم الوثيقة:</label><input type="text" id="docName" placeholder="مثال: جواز السفر، رخصة القيادة..." required></div>
-                <div class="form-group"><label>تاريخ انتهاء الصلاحية:</label><input type="date" id="docExpiry" required></div>
+                <div class="form-group"><label>اسم الوثيقة</label><input type="text" id="docName" placeholder="مثال: جواز السفر، الهوية، رخصة القيادة..." required></div>
+                <div class="form-group"><label>تاريخ انتهاء الصلاحية</label><input type="date" id="docExpiry" required></div>
                 <button type="submit" class="btn-submit">حفظ الوثيقة</button>
             </form>
         </div>
         
         <!-- الخزنة -->
         <div id="vault" class="section card">
-            <h2 style="font-weight: 800;">الخزنة المشفرة (الحسابات)</h2><br>
+            <h2 style="font-weight: 800; font-size: 28px; margin-bottom: 18px;">الخزنة المشفرة (الحسابات)</h2>
             <form onsubmit="saveVaultItem(event)">
-                <div class="form-group"><label>النوع:</label><select id="vaultType" onchange="toggleVaultFields()"><option value="إيميل">إيميل</option><option value="حساب">حساب موقع / تطبيق</option></select></div>
-                <div class="form-group"><label id="vaultNameLabel">الإيميل:</label><input type="text" id="vaultName" required></div>
-                <div class="form-group" id="vaultPlatformGroup" style="display:none;"><label>الموقع / المنصة:</label><input type="text" id="vaultPlatform"></div>
-                <div class="form-group"><label>كلمة المرور:</label><input type="text" id="vaultPassword" required></div>
-                <div class="form-group" id="vaultNotesGroup"><label>ملاحظات:</label><input type="text" id="vaultNotes"></div>
-                <div class="form-group"><label>التاريخ:</label><input type="date" id="vaultDate" required></div>
-                <button type="submit" class="btn-submit">حفظ آمن في الخزنة</button>
+                <div class="form-group"><label>النوع</label><select id="vaultType" onchange="toggleVaultFields()"><option value="إيميل">إيميل</option><option value="حساب">حساب منصة / تطبيق</option></select></div>
+                <div class="form-group"><label id="vaultNameLabel">الإيميل</label><input type="text" id="vaultName" required></div>
+                <div class="form-group" id="vaultPlatformGroup" style="display:none;"><label>المنصة / الخدمة</label><input type="text" id="vaultPlatform"></div>
+                <div class="form-group"><label>كلمة المرور</label><input type="text" id="vaultPassword" required></div>
+                <div class="form-group" id="vaultNotesGroup"><label>ملاحظات إضافية</label><input type="text" id="vaultNotes"></div>
+                <div class="form-group"><label>تاريخ التسجيل</label><input type="date" id="vaultDate" required></div>
+                <button type="submit" class="btn-submit">تشفير وحفظ في الخزنة</button>
             </form>
         </div>
 
         <!-- 🔍 البحث والسجل الشامل -->
         <div id="advanced-log" class="section">
             <div class="card">
-                <h2 style="font-weight: 800; margin-bottom: 12px;">🔍 البحث والسجل الشامل</h2>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <input type="text" id="advSearchInput" onkeyup="performAdvancedSearch()" placeholder="ابحث عن أي فاتورة، اشتراك، مشتريات، ملاحظة..." style="flex:2; outline:none; min-width:0; padding:14px; border-radius:14px; background:var(--input-bg); border:none; color:var(--text); font-size:15px;">
-                    <select id="advSearchCategory" onchange="performAdvancedSearch()" style="flex:1; outline:none; min-width:0; padding:14px; border-radius:14px; background:var(--input-bg); border:none; color:var(--text); font-size:15px; font-weight:600;">
+                <h2 style="font-weight: 800; font-size: 28px; margin-bottom: 16px;">🔍 البحث والفلترة الشاملة</h2>
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <input type="text" id="advSearchInput" onkeyup="performAdvancedSearch()" placeholder="ابحث في كافة الفواتير، المصاريف، الملاحظات..." class="dash-input" style="flex:2; font-size:15px;">
+                    <select id="advSearchCategory" onchange="performAdvancedSearch()" class="dash-input" style="flex:1; font-weight:600;">
                         <option value="all">كل الأقسام</option>
                         <option value="fixed_bills">الفواتير</option>
                         <option value="subscriptions">الاشتراكات</option>
@@ -611,97 +732,97 @@
         <!-- نماذج الإضافة السريعة -->
         <div id="fixed-bills" class="section card">
             <form onsubmit="saveFixedBill(event)">
-                <h2 style="font-weight: 800;">إضافة فاتورة</h2><br>
-                <div class="form-group"><label>النوع:</label><select id="billType" onchange="toggleFields()"><option value="كهرباء">كهرباء</option><option value="ماء">ماء</option><option value="إنترنت">إنترنت</option></select></div>
-                <div class="form-group" id="meterGroup"><label>رقم العداد:</label><input type="text" id="meterNumber"></div>
-                <div class="form-group" id="titleGroup" style="display: none;"><label>عنوان اختياري:</label><input type="text" id="optionalTitle"></div>
-                <div class="form-group"><label>المبلغ:</label><input type="number" id="billAmount" required></div>
-                <div class="form-group"><label>التاريخ:</label><input type="date" id="billDate" required></div>
+                <h2 style="font-weight: 800; font-size: 28px; margin-bottom: 18px;">إضافة فاتورة دورية</h2>
+                <div class="form-group"><label>نوع الفاتورة</label><select id="billType" onchange="toggleFields()"><option value="كهرباء">كهرباء</option><option value="ماء">ماء</option><option value="إنترنت">إنترنت</option></select></div>
+                <div class="form-group" id="meterGroup"><label>رقم العداد</label><input type="text" id="meterNumber"></div>
+                <div class="form-group" id="titleGroup" style="display: none;"><label>عنوان اختياري</label><input type="text" id="optionalTitle"></div>
+                <div class="form-group"><label>المبلغ</label><input type="number" id="billAmount" required></div>
+                <div class="form-group"><label>التاريخ</label><input type="date" id="billDate" required></div>
                 <button type="submit" class="btn-submit">حفظ الفاتورة</button>
             </form>
         </div>
         
         <div id="subscriptions" class="section card">
             <form onsubmit="saveSubscription(event)">
-                <h2 style="font-weight: 800;">إضافة اشتراك</h2><br>
-                <div class="form-group"><label>الاسم:</label><input type="text" id="subName" required></div>
-                <div class="form-group"><label>المبلغ:</label><input type="number" id="subAmount" required></div>
-                <div class="form-group"><label>تاريخ البدء:</label><input type="date" id="subDate" required></div>
-                <div class="form-group"><label>المدة:</label><select id="subDuration"><option value="1">شهر</option><option value="3">3 أشهر</option><option value="6">6 أشهر</option><option value="12">سنة</option></select></div>
+                <h2 style="font-weight: 800; font-size: 28px; margin-bottom: 18px;">تسجيل اشتراك جديد</h2>
+                <div class="form-group"><label>اسم الخدمة / الاشتراك</label><input type="text" id="subName" required></div>
+                <div class="form-group"><label>المبلغ</label><input type="number" id="subAmount" required></div>
+                <div class="form-group"><label>تاريخ بدء الاشتراك</label><input type="date" id="subDate" required></div>
+                <div class="form-group"><label>دورة التجديد</label><select id="subDuration"><option value="1">شهر واحد</option><option value="3">3 أشهر</option><option value="6">6 أشهر</option><option value="12">سنة كاملة</option></select></div>
                 <button type="submit" class="btn-submit">حفظ الاشتراك</button>
             </form>
         </div>
         
         <div id="purchases" class="section card">
             <form onsubmit="savePurchase(event)">
-                <h2 style="font-weight: 800;">إضافة مشتريات وضمان</h2><br>
-                <div class="form-group"><label>المنتج:</label><input type="text" id="purName" required></div>
-                <div class="form-group"><label>السعر:</label><input type="number" id="purAmount" required></div>
-                <div class="form-group"><label>التاريخ:</label><input type="date" id="purDate" required></div>
-                <div class="form-group"><label>الضمان (أشهر):</label><input type="number" id="purWarranty" required value="12"></div>
+                <h2 style="font-weight: 800; font-size: 28px; margin-bottom: 18px;">تسجيل منتج وضمان</h2>
+                <div class="form-group"><label>اسم المنتج</label><input type="text" id="purName" required></div>
+                <div class="form-group"><label>السعر</label><input type="number" id="purAmount" required></div>
+                <div class="form-group"><label>تاريخ الشراء</label><input type="date" id="purDate" required></div>
+                <div class="form-group"><label>مدة الضمان (أشهر)</label><input type="number" id="purWarranty" required value="12"></div>
                 <button type="submit" class="btn-submit">حفظ المنتج</button>
             </form>
         </div>
         
         <div id="notes" class="section card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h2 style="font-weight: 800;">الملاحظات</h2>
-                <button type="button" onclick="startVoiceNote()" style="background: rgba(255,59,48,0.12); color: var(--danger); border: none; padding: 6px 14px; border-radius: 16px; font-weight: 700; font-size: 13px; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2 style="font-weight: 800; font-size: 28px;">الملاحظات</h2>
+                <button type="button" onclick="startVoiceNote()" style="background: rgba(255,59,48,0.12); color: var(--apple-red); border: none; padding: 8px 16px; border-radius: var(--radius-pill); font-weight: 700; font-size: 13px; cursor: pointer;">
                     🎙️ إملاء صوتي
                 </button>
             </div>
             <form onsubmit="saveNote(event)">
-                <div class="form-group"><input type="text" id="noteTitle" placeholder="العنوان" style="font-weight:bold; border:none; background:var(--input-bg); font-size:17px;"></div>
-                <div class="form-group"><textarea id="noteBody" rows="4" placeholder="اكتب ملاحظتك هنا..." required style="border:none; resize:none; background:var(--input-bg);"></textarea></div>
+                <div class="form-group"><input type="text" id="noteTitle" placeholder="العنوان..." style="font-weight:bold; font-size:16px;"></div>
+                <div class="form-group"><textarea id="noteBody" rows="4" placeholder="اكتب ملاحظتك هنا..." required></textarea></div>
                 <button type="submit" class="btn-submit">حفظ الملاحظة</button>
             </form>
-            <div id="notesContainer" style="margin-top:16px; display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); width: 100%;"></div>
+            <div id="notesContainer" style="margin-top:20px; display:grid; gap:14px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); width: 100%;"></div>
         </div>
 
-        <!-- ⚙️ قسم الأمان والإعدادات -->
+        <!-- ⚙️ الإعدادات والأمان -->
         <div id="settings" class="section">
-            <div class="card" style="border: 0.5px solid var(--border);">
-                <h2 style="font-weight: 800;">☁️ حالة السحابة (Firebase)</h2>
-                <p id="cloudStatusText" style="font-weight:700; color:var(--warning); margin-top:10px; padding: 12px; border-radius: 14px; background: var(--input-bg);">⏳ جاري الاتصال بالسحابة...</p>
+            <div class="card" style="border: 1px solid var(--border-highlight);">
+                <h2 style="font-weight: 800; font-size: 24px;">☁️ حالة المزامنة السحابية</h2>
+                <p id="cloudStatusText" style="font-weight:700; color:var(--apple-orange); margin-top:12px; padding: 14px; border-radius: var(--radius-md); background: var(--input-fill);">⏳ جاري الاتصال بالسحابة...</p>
             </div>
 
             <div class="card">
-                <h2 style="font-weight: 800;">🛡️ الأمان والنسخ الاحتياطي اليدوي</h2>
-                <div style="display:flex; gap:10px; flex-direction:column; margin-top:15px;">
-                    <button onclick="exportData()" class="btn-submit" style="background: var(--primary);">📥 تحميل كملف (Backup)</button>
-                    <button onclick="copyDataToClipboard()" class="btn-submit" style="background: var(--text-light);">📋 نسخ البيانات كنص</button>
-                    <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
-                        <input type="file" id="importFile" accept=".json" style="flex:1; min-width:180px; padding:12px; border-radius:14px; background:var(--input-bg); border:0.5px solid var(--border); color:var(--text);">
-                        <button onclick="importData()" class="btn-submit" style="flex:1; background: var(--warning); min-width:100px;">📤 استرجاع</button>
+                <h2 style="font-weight: 800; font-size: 24px; margin-bottom: 14px;">🛡️ النسخ الاحتياطي والبيانات</h2>
+                <div style="display:flex; gap:12px; flex-direction:column;">
+                    <button onclick="exportData()" class="btn-submit" style="background: var(--apple-blue);">📥 تصدير ملف النسخة الاحتياطية (JSON)</button>
+                    <button onclick="copyDataToClipboard()" class="btn-submit" style="background: var(--input-fill); color: var(--text-primary); box-shadow: none;">📋 نسخ البيانات كنص مشفر</button>
+                    <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
+                        <input type="file" id="importFile" accept=".json" style="flex:1; min-width:180px; padding:12px; border-radius:var(--radius-md); background:var(--input-fill); border:1px solid var(--border-light); color:var(--text-primary);">
+                        <button onclick="importData()" class="btn-submit" style="flex:1; background: var(--apple-orange); min-width:100px;">📤 استرجاع</button>
                     </div>
                 </div>
             </div>
             <div class="card">
-                <h2 style="font-weight: 800;">🔔 نظام التنبيهات</h2>
-                <button onclick="requestNotificationPermission()" class="btn-submit" style="background: var(--primary); margin-top:12px;">تفعيل الإشعارات 🔔</button>
+                <h2 style="font-weight: 800; font-size: 24px; margin-bottom: 10px;">🔔 تنبيهات النظام</h2>
+                <button onclick="requestNotificationPermission()" class="btn-submit" style="background: var(--apple-blue);">تفعيل الإشعارات الفورية 🔔</button>
             </div>
         </div>
 
     </div>
 
-    <!-- 🎙️ نافذة تسجيل الملاحظة الصوتية -->
+    <!-- 🎙️ Siri Intelligence Voice Modal -->
     <div class="voice-modal-overlay" id="voiceModal">
         <div class="voice-modal">
-            <div class="voice-pulse" id="voicePulseIcon">🎙️</div>
-            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;" id="voiceModalTitle">جاري الاستماع...</h3>
-            <p style="font-size: 13px; color: var(--text-light); margin-bottom: 16px;">تحدث باللغة العربية وسيتم تدوين كلامك بدقة</p>
-            <div id="voiceTranscriptText" style="min-height: 80px; max-height: 140px; overflow-y: auto; background: var(--input-bg); padding: 12px; border-radius: 16px; font-size: 15px; font-weight: 600; margin-bottom: 20px; text-align: right; color: var(--text); border: 0.5px solid var(--border);">...</div>
+            <div class="voice-aura" id="voicePulseIcon">🎙️</div>
+            <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 6px;" id="voiceModalTitle">جاري الاستماع...</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 18px;">تحدث بوضوح باللغة العربية وسيتم تدوين كلامك فوراً</p>
+            <div id="voiceTranscriptText" style="min-height: 90px; max-height: 150px; overflow-y: auto; background: var(--input-fill); padding: 14px; border-radius: var(--radius-md); font-size: 15px; font-weight: 600; margin-bottom: 22px; text-align: right; color: var(--text-primary); border: 1px solid var(--border-light);">استمع الآن...</div>
             <div style="display: flex; gap: 10px;">
-                <button onclick="stopAndSaveVoiceNote()" class="btn-submit" style="background: var(--success); flex: 1; padding: 12px;">✅ حفظ الملاحظة</button>
-                <button onclick="cancelVoiceNote()" class="btn-submit" style="background: var(--input-bg); color: var(--text); flex: 1; padding: 12px;">إلغاء</button>
+                <button onclick="stopAndSaveVoiceNote()" class="btn-submit" style="background: var(--apple-green); flex: 1; padding: 14px;">✅ حفظ الملاحظة</button>
+                <button onclick="cancelVoiceNote()" class="btn-submit" style="background: var(--input-fill); color: var(--text-primary); flex: 1; padding: 14px; box-shadow:none;">إلغاء</button>
             </div>
         </div>
     </div>
 
-    <!-- 🏝️ الكبسولة العائمة الذكية -->
+    <!-- 🏝️ Apple Dynamic Island Dock -->
     <div class="floating-island">
         <button class="island-btn" onclick="toggleMobileMenu()">☰</button>
-        <button class="island-voice-btn" onclick="startVoiceNote()" title="تسجيل ملاحظة صوتية سريعة">🎙️</button>
+        <button class="island-voice-btn" onclick="startVoiceNote()" title="تسجيل ملاحظة صوتية">🎙️</button>
         <div class="footer-action-wrapper">
             <div class="island-popup-menu" id="footerMenu">
                 <button class="island-item" onclick="handleFooterAction('fixed-bills')">📄 إضافة فاتورة</button>
@@ -717,7 +838,7 @@
     </div>
 
     <script>
-        // --- 0. إعدادات Firebase ☁️ ---
+        // --- 0. Firebase Cloud Connection ---
         const firebaseConfig = {
             apiKey: "AIzaSyCXalyz_Xa7IeSuT8enh6MCu2alH5HvBMY",
             authDomain: "life-8892e.firebaseapp.com",
@@ -736,13 +857,13 @@
         connectedRef.on("value", (snap) => {
             const statusEl = document.getElementById('cloudStatusText');
             if (snap.val() === true) {
-                if(statusEl) { statusEl.innerText = "🟢 متصل ومحمي (مزامنة لحظية نشطة)"; statusEl.style.color = "var(--success)"; }
+                if(statusEl) { statusEl.innerText = "🟢 متصل بالسحابة (مزامنة فورية نشطة)"; statusEl.style.color = "var(--apple-green)"; }
             } else {
-                if(statusEl) { statusEl.innerText = "🔴 غير متصل بالسحابة (يتم الحفظ محلياً فقط)"; statusEl.style.color = "var(--danger)"; }
+                if(statusEl) { statusEl.innerText = "🔴 وضع عدم الاتصال (يتم الحفظ محلياً)"; statusEl.style.color = "var(--apple-red)"; }
             }
         });
 
-        // --- 1. مصفاة البيانات السحرية ---
+        // --- 1. Database Architecture & Normalizer ---
         function normalizeDB(data) {
             if (!data) data = {};
             const lists = ['fixed_bills', 'subscriptions', 'purchases', 'vault', 'notes', 'documents', 'todos', 'expenses'];
@@ -759,12 +880,12 @@
         const todayStr = new Date().toISOString().split('T')[0];
         ['billDate', 'subDate', 'purDate', 'vaultDate', 'docExpiry'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = todayStr; });
 
-        // --- ☁️ محرك المزامنة اللحظية ---
+        // --- ☁️ Real-Time Engine ---
         function showSyncStatus(msg, isError = false) {
             const el = document.getElementById('syncStatus'); 
             if(!el) return;
             el.innerText = msg;
-            el.style.background = isError ? 'rgba(255, 59, 48, 0.9)' : 'rgba(52, 199, 89, 0.9)';
+            el.style.color = isError ? 'var(--apple-red)' : 'var(--apple-green)';
             el.classList.add('show'); 
             setTimeout(() => el.classList.remove('show'), 2000);
         }
@@ -772,7 +893,7 @@
         function saveToCloud() {
             showSyncStatus('☁️ جاري الحفظ...');
             dbRef.set(db).then(() => { showSyncStatus('✅ محفوظ سحابياً'); })
-                .catch(err => { showSyncStatus('❌ فشل الاتصال', true); });
+                .catch(err => { showSyncStatus('❌ خطأ في الحفظ', true); });
         }
 
         dbRef.on('value', (snapshot) => {
@@ -799,7 +920,7 @@
             localStorage.setItem('myLifeAppDB', JSON.stringify(db));
         }
 
-        // --- 🎙️ محرك تحويل الصوت إلى نص المصلح بالكامل (بدون تكرار) ---
+        // --- 🎙️ Voice-to-Text Engine (Non-Duplicating Architecture) ---
         let recognition = null;
         let isRecordingVoice = false;
         let accumulatedSpeechText = '';
@@ -807,7 +928,7 @@
         if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
-            recognition.continuous = false; // إلغاء الوضع المستمر يمنع التكرار التراكمي في أندرويد
+            recognition.continuous = false;
             recognition.interimResults = false;
             recognition.lang = 'ar-SA';
 
@@ -825,20 +946,17 @@
             };
 
             recognition.onend = () => {
-                // إعادة التشغيل تلقائياً ما دامت النافذة مفتوحة لتسجيل الجمل التالية
                 if (isRecordingVoice) {
-                    try {
-                        recognition.start();
-                    } catch (e) {}
+                    try { recognition.start(); } catch (e) {}
                 }
             };
 
             recognition.onerror = (event) => {
                 if (event.error === 'no-speech') return;
                 if (event.error === 'network') {
-                    document.getElementById('voiceTranscriptText').innerHTML = '⚠️ <strong>تعذر الاتصال بخدمة الصوت</strong><br><small style="font-size:12px; color:var(--text-light);">إذا كنت تستخدم Brave، فعّل خيار Google Voice Recognition من الإعدادات، أو استخدم متصفح Chrome/Edge.</small>';
+                    document.getElementById('voiceTranscriptText').innerHTML = '⚠️ <strong>تعذر الاتصال بالصوت</strong><br><small style="font-size:12px; color:var(--text-secondary);">إذا كنت تستخدم متصفح Brave، يرجى تفعيل Google Voice Recognition من إعدادات الخصوصية، أو استخدم متصفح Chrome/Edge.</small>';
                 } else if (event.error === 'not-allowed') {
-                    document.getElementById('voiceTranscriptText').innerText = '⚠️ يرجى السماح بصلاحية الميكروفون من إعدادات المتصفح.';
+                    document.getElementById('voiceTranscriptText').innerText = '⚠️ يرجى منح إذن استخدام الميكروفون.';
                 }
             };
         }
@@ -853,11 +971,7 @@
             document.getElementById('voiceTranscriptText').innerText = 'استمع الآن... تحدث بوضوح';
             document.getElementById('voiceModal').classList.add('active');
 
-            try {
-                recognition.start();
-            } catch (e) {
-                console.log(e);
-            }
+            try { recognition.start(); } catch (e) { console.log(e); }
         }
 
         function stopAndSaveVoiceNote() {
@@ -875,7 +989,7 @@
                     title: `🎙️ ملاحظة صوتية (${timeStr})`,
                     body: noteContent
                 });
-                finalizeAction('✅ تم حفظ الملاحظة الصوتية بنجاح!');
+                finalizeAction('✅ تم حفظ الملاحظة بنجاح!');
             }
         }
 
@@ -887,7 +1001,7 @@
             document.getElementById('voiceModal').classList.remove('active');
         }
 
-        // --- التصفح والفوتر ---
+        // --- Navigation ---
         function updateFooterNavigation(id) { 
             const backBtn = document.getElementById('footerBackBtn'); 
             if(!backBtn) return;
@@ -964,7 +1078,7 @@
         function applyTheme() { 
             document.body.classList.toggle('dark-mode', db.settings.darkMode); 
             document.getElementById('themeIconDesktop').innerText = db.settings.darkMode ? '☀️' : '🌙'; 
-            const color = db.settings.darkMode ? '#000000' : '#F2F2F7';
+            const color = db.settings.darkMode ? '#000000' : '#F5F5F7';
             document.getElementById('themeColorMeta').setAttribute('content', color);
             document.documentElement.style.backgroundColor = color;
         }
@@ -977,7 +1091,7 @@
         }
         applyTheme();
 
-        // --- العمليات الرئيسية ---
+        // --- Core Business Logic ---
         function updateDashboardZen() {
             let spentThisMonth = 0; 
             const cMonth = new Date().getMonth(); 
@@ -1003,25 +1117,25 @@
                     let pDays = Math.ceil((today - start) / (1000 * 60 * 60 * 24)); 
                     let perc = Math.max(0, Math.min(100, (pDays / tDays) * 100));
                     if(start.getMonth() === cMonth && start.getFullYear() === cYear) spentThisMonth += parseFloat(sub.amount);
-                    activeSubsHtml += `<div style="margin-bottom:14px;"><div style="display:flex; justify-content:space-between; font-size:14px; font-weight:600; margin-bottom:5px;"><strong>${sub.name}</strong> <span style="color:var(--text-light); font-size:12px;">متبقي ${tDays - pDays} يوم</span></div><div class="zen-progress-bg"><div class="zen-progress-fill" style="width:${perc}%"></div></div></div>`;
+                    activeSubsHtml += `<div style="margin-bottom:14px;"><div style="display:flex; justify-content:space-between; font-size:14px; font-weight:600; margin-bottom:5px;"><strong>${sub.name}</strong> <span style="color:var(--text-secondary); font-size:12px;">متبقي ${tDays - pDays} يوم</span></div><div class="zen-progress-bg"><div class="zen-progress-fill" style="width:${perc}%"></div></div></div>`;
                 }
             });
-            document.getElementById('dashSpent').innerHTML = `${spentThisMonth.toLocaleString()} <span style="font-size:16px; color:var(--text-light); font-weight:500;">شيكل</span>`;
-            document.getElementById('dashActiveSubs').innerHTML = activeSubsHtml || '<p style="color:var(--text-light); font-size:14px; font-weight:500;">لا توجد اشتراكات فعالة.</p>';
+            document.getElementById('dashSpent').innerHTML = `${spentThisMonth.toLocaleString()} <span>شيكل</span>`;
+            document.getElementById('dashActiveSubs').innerHTML = activeSubsHtml || '<p style="color:var(--text-secondary); font-size:14px; font-weight:500;">لا توجد اشتراكات نشطة حالياً.</p>';
 
             let alertsHtml = '';
             const hasElec = db.fixed_bills.some(b => { 
                 let d = new Date(b.date); 
                 return b.type === 'كهرباء' && d.getMonth() === cMonth && d.getFullYear() === cYear; 
             });
-            if(!hasElec) alertsHtml += `<span style="color:var(--danger); display:block; margin-bottom:4px;">⚠️ لم تُسجل فاتورة كهرباء هذا الشهر</span>`;
+            if(!hasElec) alertsHtml += `<span style="color:var(--apple-red); display:block; margin-bottom:4px;">⚠️ لم تُسجل فاتورة كهرباء هذا الشهر</span>`;
             
             db.documents.forEach(doc => {
                 let diff = Math.ceil((new Date(doc.expiryDate) - new Date()) / (1000 * 60 * 60 * 24));
-                if(diff <= 30 && diff >= 0) alertsHtml += `<span style="color:var(--warning); display:block;">⏳ وثيقة (${doc.name}) تنتهي قريباً</span>`;
-                else if (diff < 0) alertsHtml += `<span style="color:var(--danger); display:block;">❌ وثيقة (${doc.name}) منتهية</span>`;
+                if(diff <= 30 && diff >= 0) alertsHtml += `<span style="color:var(--apple-orange); display:block;">⏳ وثيقة (${doc.name}) تنتهي قريباً</span>`;
+                else if (diff < 0) alertsHtml += `<span style="color:var(--apple-red); display:block;">❌ وثيقة (${doc.name}) منتهية</span>`;
             });
-            document.getElementById('dashAlerts').innerHTML = alertsHtml || '<span style="color:var(--success);">✅ جميع أمورك سليمة ومحدثة</span>';
+            document.getElementById('dashAlerts').innerHTML = alertsHtml || '<span style="color:var(--apple-green);">✅ كافة الفواتير والوثائق محدثة</span>';
 
             renderDashTodos(); 
             renderDashExpenses(); 
@@ -1057,9 +1171,9 @@
             c.innerHTML = ''; 
             let todosToRender = db.todos.filter(t => t.date === todayStr); 
             todosToRender.forEach(t => { 
-                c.innerHTML += `<div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:0.5px solid var(--border); font-size:15px; word-break: break-word;"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})" style="width:20px; height:20px; cursor:pointer; accent-color:var(--primary); flex-shrink:0;"><span style="flex:1; font-weight:600; ${t.done?'text-decoration:line-through; color:var(--text-light); font-weight:400;':''}">${t.text}</span><button onclick="deleteTodo(${t.id})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:16px; flex-shrink:0;">✖</button></div>`; 
+                c.innerHTML += `<div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-light); font-size:15px; word-break: break-word;"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})" style="width:20px; height:20px; cursor:pointer; accent-color:var(--apple-blue); flex-shrink:0;"><span style="flex:1; font-weight:600; ${t.done?'text-decoration:line-through; color:var(--text-secondary); font-weight:400;':''}">${t.text}</span><button onclick="deleteTodo(${t.id})" style="background:none; border:none; color:var(--apple-red); cursor:pointer; font-size:16px; flex-shrink:0;">✖</button></div>`; 
             }); 
-            if(c.innerHTML==='') c.innerHTML='<p style="color:var(--text-light); font-size:14px; padding-top:6px;">لا توجد مهام اليوم.</p>'; 
+            if(c.innerHTML==='') c.innerHTML='<p style="color:var(--text-secondary); font-size:14px; padding-top:6px;">لا توجد مهام مسجلة اليوم.</p>'; 
         }
 
         function renderFullTodos() { 
@@ -1076,11 +1190,11 @@
                 let dateLabel = date === todayStr ? 'اليوم' : new Date(date).toLocaleDateString('ar-EG'); 
                 let html = `<div class="date-group-header">📅 مهام ${dateLabel}</div>`; 
                 grouped[date].forEach(t => { 
-                    html += `<div style="display:flex; align-items:center; gap:12px; padding:14px 12px; border-bottom:0.5px solid var(--border); background:var(--input-bg); border-radius:14px; margin-bottom:8px; word-break: break-word;"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})" style="width:20px; height:20px; cursor:pointer; accent-color:var(--primary); flex-shrink:0;"><span style="flex:1; font-weight:600; ${t.done?'text-decoration:line-through; color:var(--text-light);':''}">${t.text}</span><button onclick="deleteTodo(${t.id})" style="background:rgba(255,59,48,0.12); border:none; color:var(--danger); border-radius:8px; padding:6px 12px; cursor:pointer; font-weight:bold; flex-shrink:0;">حذف</button></div>`; 
+                    html += `<div style="display:flex; align-items:center; gap:12px; padding:14px 14px; border-bottom:1px solid var(--border-light); background:var(--input-fill); border-radius:var(--radius-md); margin-bottom:8px; word-break: break-word;"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})" style="width:20px; height:20px; cursor:pointer; accent-color:var(--apple-blue); flex-shrink:0;"><span style="flex:1; font-weight:600; ${t.done?'text-decoration:line-through; color:var(--text-secondary);':''}">${t.text}</span><button onclick="deleteTodo(${t.id})" style="background:rgba(255,59,48,0.12); border:none; color:var(--apple-red); border-radius:8px; padding:6px 12px; cursor:pointer; font-weight:bold; flex-shrink:0;">حذف</button></div>`; 
                 }); 
                 c.innerHTML += html; 
             }); 
-            if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light);">الأرشيف فارغ.</p>'; 
+            if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-secondary);">الأرشيف فارغ.</p>'; 
         }
 
         function addExpenseDash(e) { 
@@ -1105,9 +1219,9 @@
             let total = 0; 
             expensesToRender.forEach(ex => { 
                 total += parseFloat(ex.amount); 
-                c.innerHTML += `<div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:0.5px solid var(--border); font-size:15px; word-break: break-word;"><div style="flex:1; padding-left:10px;"><strong style="font-weight:600;">${ex.desc}</strong></div><div style="font-weight:700; color:var(--danger); flex-shrink:0;">${ex.amount} ₪</div><button onclick="deleteExpense(${ex.id})" style="background:none; border:none; color:var(--text-light); cursor:pointer; padding-right:15px; font-size:16px; flex-shrink:0;">✖</button></div>`; 
+                c.innerHTML += `<div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border-light); font-size:15px; word-break: break-word;"><div style="flex:1; padding-left:10px;"><strong style="font-weight:600;">${ex.desc}</strong></div><div style="font-weight:700; color:var(--apple-red); flex-shrink:0;">${ex.amount} ₪</div><button onclick="deleteExpense(${ex.id})" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; padding-right:15px; font-size:16px; flex-shrink:0;">✖</button></div>`; 
             }); 
-            if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light); font-size:14px; padding-top:6px;">لم تسجل مصاريف اليوم.</p>'; 
+            if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-secondary); font-size:14px; padding-top:6px;">لم تسجل مصاريف اليوم.</p>'; 
             const totalEl = document.getElementById('dashExpensesTotal'); 
             if(totalEl) totalEl.innerText = `${total} شيكل`; 
         }
@@ -1139,13 +1253,13 @@
             sortedDates.forEach(date => { 
                 let dateLabel = date === todayStr ? 'اليوم' : new Date(date).toLocaleDateString('ar-EG'); 
                 let dayTotal = grouped[date].reduce((sum, item) => sum + parseFloat(item.amount), 0); 
-                let html = `<div class="date-group-header">📅 ${dateLabel} <span style="margin-right:10px; color:var(--danger);">(${dayTotal} ₪)</span></div>`; 
+                let html = `<div class="date-group-header">📅 ${dateLabel} <span style="margin-right:10px; color:var(--apple-red);">(${dayTotal} ₪)</span></div>`; 
                 grouped[date].forEach(ex => { 
-                    html += `<div style="display:flex; justify-content:space-between; padding:14px 12px; border-bottom:0.5px solid var(--border); background:var(--input-bg); border-radius:14px; margin-bottom:8px; word-break: break-word;"><div style="font-weight:600; flex:1;">${ex.desc}</div><div style="display:flex; gap:15px; align-items:center; flex-shrink:0;"><span style="color:var(--danger); font-weight:700;">${ex.amount} ₪</span><button onclick="deleteExpense(${ex.id})" style="background:none; border:none; color:var(--text-light); cursor:pointer;">✖</button></div></div>`; 
+                    html += `<div style="display:flex; justify-content:space-between; padding:14px 14px; border-bottom:1px solid var(--border-light); background:var(--input-fill); border-radius:var(--radius-md); margin-bottom:8px; word-break: break-word;"><div style="font-weight:600; flex:1;">${ex.desc}</div><div style="display:flex; gap:15px; align-items:center; flex-shrink:0;"><span style="color:var(--apple-red); font-weight:700;">${ex.amount} ₪</span><button onclick="deleteExpense(${ex.id})" style="background:none; border:none; color:var(--text-secondary); cursor:pointer;">✖</button></div></div>`; 
                 }); 
                 c.innerHTML += html; 
             }); 
-            if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-light);">الأرشيف فارغ.</p>'; 
+            if(c.innerHTML === '') c.innerHTML = '<p style="color:var(--text-secondary);">الأرشيف فارغ.</p>'; 
         }
 
         function toggleFields() { 
@@ -1172,7 +1286,7 @@
             if(!c) return; 
             c.innerHTML = ''; 
             [...db.notes].reverse().forEach(n => { 
-                c.innerHTML += `<div style="background:var(--card-solid); padding:16px; border-radius:18px; border:0.5px solid var(--border); position:relative;"><button onclick="deleteItem('notes', ${n.id})" style="position:absolute; top:12px; left:12px; background:none; border:none; color:var(--danger); cursor:pointer;">🗑</button><strong style="display:block; font-weight:700; margin-bottom:8px;">${n.title}</strong><span style="color:var(--text-light); font-size:14px; white-space:pre-wrap;">${n.body}</span></div>`; 
+                c.innerHTML += `<div style="background:var(--input-fill); padding:18px; border-radius:var(--radius-md); border:1px solid var(--border-light); position:relative;"><button onclick="deleteItem('notes', ${n.id})" style="position:absolute; top:12px; left:12px; background:none; border:none; color:var(--apple-red); cursor:pointer;">🗑</button><strong style="display:block; font-weight:700; margin-bottom:8px;">${n.title}</strong><span style="color:var(--text-secondary); font-size:14px; white-space:pre-wrap;">${n.body}</span></div>`; 
             }); 
         }
 
@@ -1193,10 +1307,10 @@
             if(query !== '') results = results.filter(i => (i._title && i._title.toLowerCase().includes(query)) || (i._sub1 && i._sub1.toLowerCase().includes(query)));
             results.sort((a,b) => b._sort - a._sort);
 
-            if(results.length === 0) { container.innerHTML = '<p style="color:var(--text-light); font-weight:500; text-align:center; padding:20px;">لا توجد نتائج مطابقة للبحث.</p>'; return; }
+            if(results.length === 0) { container.innerHTML = '<p style="color:var(--text-secondary); font-weight:500; text-align:center; padding:20px;">لا توجد نتائج مطابقة للبحث.</p>'; return; }
             results.forEach(res => {
-                let passStyle = res._type === 'vault' ? `background:var(--danger); color:white; padding:2px 8px; border-radius:6px; font-family:monospace;` : `color:var(--text-light);`;
-                container.innerHTML += `<div class="list-item" style="background:var(--card-solid); padding:16px; border-radius:16px; margin-bottom:10px; border:0.5px solid var(--border); word-break: break-word;"><div style="flex:1;"><strong>${res._icon} ${res._title}</strong><br><span style="${passStyle} font-size:13px; font-weight:600;">${res._sub1}</span></div><div style="display:flex; gap:8px; flex-shrink:0;"><button onclick="editItem('${res._type}', ${res.id})" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size:16px;">✏️</button><button onclick="deleteItem('${res._type}', ${res.id})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:16px;">🗑</button></div></div>`;
+                let passStyle = res._type === 'vault' ? `background:var(--apple-red); color:white; padding:2px 8px; border-radius:6px; font-family:monospace;` : `color:var(--text-secondary);`;
+                container.innerHTML += `<div class="list-item" style="background:var(--input-fill); padding:16px; border-radius:var(--radius-md); margin-bottom:10px; border:1px solid var(--border-light); word-break: break-word;"><div style="flex:1;"><strong>${res._icon} ${res._title}</strong><br><span style="${passStyle} font-size:13px; font-weight:600;">${res._sub1}</span></div><div style="display:flex; gap:8px; flex-shrink:0;"><button onclick="editItem('${res._type}', ${res.id})" style="background:none; border:none; color:var(--apple-blue); cursor:pointer; font-size:16px;">✏️</button><button onclick="deleteItem('${res._type}', ${res.id})" style="background:none; border:none; color:var(--apple-red); cursor:pointer; font-size:16px;">🗑</button></div></div>`;
             });
         }
 
@@ -1245,7 +1359,7 @@
         
         function copyDataToClipboard() { 
             navigator.clipboard.writeText(JSON.stringify(db)).then(() => { 
-                alert("✅ تم نسخ جميع بياناتك كنص بنجاح!"); 
+                alert("✅ تم نسخ البيانات كنص بنجاح!"); 
             }).catch(err => { 
                 alert("❌ فشل النسخ."); 
             }); 
@@ -1259,7 +1373,7 @@
             Notification.requestPermission().then(function (permission) { 
                 if (permission === "granted") { 
                     alert("✅ تم تفعيل الإشعارات بنجاح!"); 
-                    new Notification("Life OS", { body: "الإشعارات تعمل بشكل ممتاز" }); 
+                    new Notification("Life OS", { body: "الإشعارات الفورية نشطة" }); 
                 } else { 
                     alert("❌ تم رفض الصلاحية."); 
                 } 
