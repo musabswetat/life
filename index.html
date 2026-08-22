@@ -11,16 +11,16 @@
     <meta name="theme-color" content="#F2F2F7" id="themeColorMeta">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2313/2313436.png">
     
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Zen%20OS%22%2C%22short_name%22%3A%22Zen%20OS%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%2F%22%2C%22background_color%22%3A%22%23F2F2F7%22%2C%22theme_color%22%3A%22%23F2F2F7%22%7D'>
+    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Life%20OS%22%2C%22short_name%22%3A%22Life%20OS%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%2F%22%2C%22background_color%22%3A%22%23F2F2F7%22%2C%22theme_color%22%3A%22%23F2F2F7%22%7D'>
 
-    <title>نظام الإدارة الشخصي (Zen OS)</title>
+    <title>Life OS</title>
     
     <!-- ☁️ مكتبات Firebase السحابية -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
-        /* 🎨 لوحة ألوان Apple iOS الأصلية */
+        /* 🎨 لوحة ألوان Apple iOS الرسمية */
         :root { 
             --primary: #007AFF; 
             --primary-hover: #0056b3; 
@@ -60,7 +60,7 @@
             -webkit-tap-highlight-color: transparent; 
         }
 
-        /* منع أشرطة التمرير كلياً للمظهر النظيف */
+        /* منع أشرطة التمرير كلياً */
         ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
         * { scrollbar-width: none !important; -ms-overflow-style: none !important; }
         
@@ -80,7 +80,7 @@
             position: relative;
         }
 
-        /* 🌟 القائمة الجانبية بنمط iOS Glass (قابلة للتمرير الكامل) */
+        /* 🌟 القائمة الجانبية النظيفة بنمط iOS Glass */
         .sidebar-overlay { 
             display: none; 
             position: fixed; 
@@ -105,7 +105,7 @@
             flex-direction: column; 
             align-items: center; 
             padding: 24px 0 100px 0; 
-            gap: 6px; 
+            gap: 8px; 
             z-index: 1002; 
             transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
             overflow-y: auto;
@@ -115,7 +115,7 @@
             position: sticky;
             top: 0;
         }
-        .sidebar:hover { width: 250px; }
+        .sidebar:hover { width: 240px; }
         .sidebar button { 
             width: 90%; 
             padding: 12px 14px; 
@@ -149,7 +149,7 @@
             width: 100%;
             max-width: 900px;
             margin: 0 auto;
-            padding: 24px 16px 140px 16px; /* مسافة أمان لكي لا يغطي الزر العائم على آخر عنصر */
+            padding: 24px 16px 140px 16px; 
             box-sizing: border-box;
             min-height: 100vh;
         }
@@ -201,7 +201,7 @@
         }
         .dash-input:focus { box-shadow: 0 0 0 2px var(--primary); }
 
-        /* 🏝️ الكبسولة العائمة الذكية (iOS Floating Island Dock) */
+        /* 🏝️ الكبسولة العائمة الذكية */
         .floating-island {
             position: fixed;
             bottom: 24px;
@@ -237,6 +237,24 @@
             flex-shrink: 0;
         }
         .island-btn:active { transform: scale(0.9); }
+
+        /* زر التسجيل الصوتي */
+        .island-voice-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 59, 48, 0.12);
+            color: var(--danger);
+            border: none;
+            font-size: 19px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+        .island-voice-btn:active { transform: scale(0.9); background: var(--danger); color: white; }
 
         .island-action-btn {
             background: var(--primary);
@@ -280,7 +298,7 @@
             opacity: 0;
             pointer-events: none;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            width: 250px;
+            width: 260px;
         }
         .island-popup-menu.open {
             opacity: 1;
@@ -303,6 +321,45 @@
             transition: all 0.15s ease;
         }
         .island-item:active { background: var(--primary); color: white; transform: scale(0.98); }
+
+        /* 🎙️ نافذة تسجيل الملاحظة الصوتية */
+        .voice-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 99999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .voice-modal-overlay.active { display: flex; animation: fadeIn 0.2s ease-out; }
+        .voice-modal {
+            background: var(--card-solid);
+            width: 100%;
+            max-width: 380px;
+            border-radius: 28px;
+            padding: 26px;
+            text-align: center;
+            border: 0.5px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .voice-pulse {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 59, 48, 0.15);
+            color: var(--danger);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; margin: 0 auto 16px auto;
+            animation: pulse-ring 1.5s infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.5); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 16px rgba(255, 59, 48, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+        }
 
         @media screen and (max-height: 480px) { .floating-island { display: none !important; } }
         
@@ -417,18 +474,16 @@
     <div id="syncStatus">☁️ جاري المزامنة...</div>
     <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
 
-    <!-- 🌟 القائمة الجانبية (شاشات الكمبيوتر + درج الهاتف القابل للتمرير) -->
+    <!-- 🌟 القائمة الجانبية النظيفة -->
     <div class="sidebar" id="mainSidebar">
-        <div style="padding: 0 24px 20px 24px; font-weight: 800; font-size: 22px; color: var(--primary); width: 100%; display: none;" id="mobileSidebarTitle">Zen OS</div>
+        <div style="padding: 0 24px 20px 24px; font-weight: 800; font-size: 22px; color: var(--primary); width: 100%; display: none;" id="mobileSidebarTitle">Life OS</div>
         <button class="nav-btn active" onclick="showSection('dashboard')"><span class="icon">🏠</span><span class="text">الرئيسية</span></button>
         <button class="nav-btn" onclick="showSection('expenses-stats')"><span class="icon">📊</span><span class="text">الإحصائيات والمصاريف</span></button>
         <button class="nav-btn" onclick="showSection('todos')"><span class="icon">✅</span><span class="text">أرشيف المهام</span></button>
-        <button class="nav-btn" onclick="showSection('notes')"><span class="icon">📝</span><span class="text">الملاحظات</span></button>
         <button class="nav-btn" onclick="showSection('documents')"><span class="icon">🆔</span><span class="text">الوثائق</span></button>
-        <button class="nav-btn" onclick="showSection('fixed-bills')"><span class="icon">📄</span><span class="text">الفواتير</span></button>
-        <button class="nav-btn" onclick="showSection('subscriptions')"><span class="icon">🔁</span><span class="text">الاشتراكات</span></button>
-        <button class="nav-btn" onclick="showSection('purchases')"><span class="icon">🛒</span><span class="text">المشتريات</span></button>
         <button class="nav-btn" onclick="showSection('vault')"><span class="icon">🔐</span><span class="text">الخزنة</span></button>
+        <button class="nav-btn" onclick="showSection('advanced-log')"><span class="icon">🔍</span><span class="text">البحث والسجل الشامل</span></button>
+        
         <div style="margin-top: auto; width: 100%; border-top: 0.5px solid var(--border); padding-top: 10px;">
             <button onclick="toggleTheme()"><span class="icon" id="themeIconDesktop">🌙</span><span class="text">المظهر</span></button>
             <button onclick="showSection('settings')"><span class="icon">⚙️</span><span class="text">الأمان والإعدادات</span></button>
@@ -452,7 +507,7 @@
             </div>
 
             <div class="dashboard-grid">
-                <!-- المهام (تتمدد ديناميكياً بدون أي Scrollbar) -->
+                <!-- المهام -->
                 <div class="card" style="margin-bottom: 0;">
                     <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 16px; color: var(--text);">✅ مهام اليوم</h3>
                     <form onsubmit="addTodoDash(event)" class="dash-form">
@@ -462,7 +517,7 @@
                     <div id="dashTodosList" style="width: 100%;"></div>
                 </div>
 
-                <!-- المصروفات اليومية (تتمدد ديناميكياً بدون أي Scrollbar) -->
+                <!-- المصروفات اليومية -->
                 <div class="card" style="margin-bottom: 0;">
                     <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 16px; color: var(--text);">💸 مصروفات اليوم</h3>
                     <form onsubmit="addExpenseDash(event)" class="dash-form">
@@ -498,7 +553,52 @@
         <!-- ✅ المهام (أرشيف) -->
         <div id="todos" class="section card"><h2 style="font-weight: 800;">✅ أرشيف المهام</h2><div id="fullTodosContainer" style="width: 100%; margin-top: 10px;"></div></div>
 
-        <!-- الفواتير -->
+        <!-- الوثائق الرسمية -->
+        <div id="documents" class="section card">
+            <h2 style="font-weight: 800;">الوثائق الرسمية</h2><br>
+            <form onsubmit="saveDocument(event)">
+                <div class="form-group"><label>اسم الوثيقة:</label><input type="text" id="docName" placeholder="مثال: جواز السفر، رخصة القيادة..." required></div>
+                <div class="form-group"><label>تاريخ انتهاء الصلاحية:</label><input type="date" id="docExpiry" required></div>
+                <button type="submit" class="btn-submit">حفظ الوثيقة</button>
+            </form>
+        </div>
+        
+        <!-- الخزنة -->
+        <div id="vault" class="section card">
+            <h2 style="font-weight: 800;">الخزنة المشفرة (الحسابات)</h2><br>
+            <form onsubmit="saveVaultItem(event)">
+                <div class="form-group"><label>النوع:</label><select id="vaultType" onchange="toggleVaultFields()"><option value="إيميل">إيميل</option><option value="حساب">حساب موقع / تطبيق</option></select></div>
+                <div class="form-group"><label id="vaultNameLabel">الإيميل:</label><input type="text" id="vaultName" required></div>
+                <div class="form-group" id="vaultPlatformGroup" style="display:none;"><label>الموقع / المنصة:</label><input type="text" id="vaultPlatform"></div>
+                <div class="form-group"><label>كلمة المرور:</label><input type="text" id="vaultPassword" required></div>
+                <div class="form-group" id="vaultNotesGroup"><label>ملاحظات:</label><input type="text" id="vaultNotes"></div>
+                <div class="form-group"><label>التاريخ:</label><input type="date" id="vaultDate" required></div>
+                <button type="submit" class="btn-submit">حفظ آمن في الخزنة</button>
+            </form>
+        </div>
+
+        <!-- 🔍 البحث والسجل الشامل -->
+        <div id="advanced-log" class="section">
+            <div class="card">
+                <h2 style="font-weight: 800; margin-bottom: 12px;">🔍 البحث والسجل الشامل</h2>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <input type="text" id="advSearchInput" onkeyup="performAdvancedSearch()" placeholder="ابحث عن أي فاتورة، اشتراك، مشتريات، ملاحظة..." style="flex:2; outline:none; min-width:0; padding:14px; border-radius:14px; background:var(--input-bg); border:none; color:var(--text); font-size:15px;">
+                    <select id="advSearchCategory" onchange="performAdvancedSearch()" style="flex:1; outline:none; min-width:0; padding:14px; border-radius:14px; background:var(--input-bg); border:none; color:var(--text); font-size:15px; font-weight:600;">
+                        <option value="all">كل الأقسام</option>
+                        <option value="fixed_bills">الفواتير</option>
+                        <option value="subscriptions">الاشتراكات</option>
+                        <option value="expenses">المصروفات اليومية</option>
+                        <option value="purchases">المشتريات</option>
+                        <option value="notes">الملاحظات</option>
+                        <option value="vault">الخزنة</option>
+                        <option value="documents">الوثائق</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card" id="advSearchResultsContainer" style="width: 100%;"></div>
+        </div>
+
+        <!-- نماذج الإضافة السريعة -->
         <div id="fixed-bills" class="section card">
             <form onsubmit="saveFixedBill(event)">
                 <h2 style="font-weight: 800;">إضافة فاتورة</h2><br>
@@ -511,7 +611,6 @@
             </form>
         </div>
         
-        <!-- الاشتراكات -->
         <div id="subscriptions" class="section card">
             <form onsubmit="saveSubscription(event)">
                 <h2 style="font-weight: 800;">إضافة اشتراك</h2><br>
@@ -523,7 +622,6 @@
             </form>
         </div>
         
-        <!-- المشتريات والضمان -->
         <div id="purchases" class="section card">
             <form onsubmit="savePurchase(event)">
                 <h2 style="font-weight: 800;">إضافة مشتريات وضمان</h2><br>
@@ -535,39 +633,14 @@
             </form>
         </div>
         
-        <!-- الملاحظات -->
         <div id="notes" class="section card">
             <h2 style="font-weight: 800;">الملاحظات</h2><br>
             <form onsubmit="saveNote(event)">
                 <div class="form-group"><input type="text" id="noteTitle" placeholder="العنوان" style="font-weight:bold; border:none; background:var(--input-bg); font-size:17px;"></div>
-                <div class="form-group"><textarea id="noteBody" rows="4" placeholder="المحتوى..." required style="border:none; resize:none; background:var(--input-bg);"></textarea></div>
+                <div class="form-group"><textarea id="noteBody" rows="4" placeholder="اكتب ملاحظتك هنا..." required style="border:none; resize:none; background:var(--input-bg);"></textarea></div>
                 <button type="submit" class="btn-submit">حفظ الملاحظة</button>
             </form>
             <div id="notesContainer" style="margin-top:16px; display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); width: 100%;"></div>
-        </div>
-        
-        <!-- الوثائق -->
-        <div id="documents" class="section card">
-            <h2 style="font-weight: 800;">الوثائق الرسمية</h2><br>
-            <form onsubmit="saveDocument(event)">
-                <div class="form-group"><label>الوثيقة:</label><input type="text" id="docName" required></div>
-                <div class="form-group"><label>انتهاء الصلاحية:</label><input type="date" id="docExpiry" required></div>
-                <button type="submit" class="btn-submit">حفظ</button>
-            </form>
-        </div>
-        
-        <!-- الخزنة -->
-        <div id="vault" class="section card">
-            <h2 style="font-weight: 800;">الخزنة (الحسابات)</h2><br>
-            <form onsubmit="saveVaultItem(event)">
-                <div class="form-group"><label>النوع:</label><select id="vaultType" onchange="toggleVaultFields()"><option value="إيميل">إيميل</option><option value="حساب">حساب موقع</option></select></div>
-                <div class="form-group"><label id="vaultNameLabel">الإيميل:</label><input type="text" id="vaultName" required></div>
-                <div class="form-group" id="vaultPlatformGroup" style="display:none;"><label>الموقع:</label><input type="text" id="vaultPlatform"></div>
-                <div class="form-group"><label>كلمة المرور:</label><input type="text" id="vaultPassword" required></div>
-                <div class="form-group" id="vaultNotesGroup"><label>ملاحظات:</label><input type="text" id="vaultNotes"></div>
-                <div class="form-group"><label>التاريخ:</label><input type="date" id="vaultDate" required></div>
-                <button type="submit" class="btn-submit">حفظ آمن</button>
-            </form>
         </div>
 
         <!-- ⚙️ قسم الأمان والإعدادات -->
@@ -594,32 +667,26 @@
             </div>
         </div>
 
-        <!-- 🔍 البحث والسجل -->
-        <div id="advanced-log" class="section">
-            <div class="card">
-                <h2 style="font-weight: 800;">البحث والسجل</h2>
-                <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
-                    <input type="text" id="advSearchInput" onkeyup="performAdvancedSearch()" placeholder="ابحث عن أي شيء..." style="flex:2; outline:none; min-width:0; padding:14px; border-radius:14px; background:var(--input-bg); border:none; color:var(--text);">
-                    <select id="advSearchCategory" onchange="performAdvancedSearch()" style="flex:1; outline:none; min-width:0; padding:14px; border-radius:14px; background:var(--input-bg); border:none; color:var(--text);">
-                        <option value="all">كل الأقسام</option>
-                        <option value="fixed_bills">الفواتير</option>
-                        <option value="subscriptions">الاشتراكات</option>
-                        <option value="expenses">المصروفات اليومية</option>
-                        <option value="purchases">المشتريات</option>
-                        <option value="vault">الخزنة</option>
-                        <option value="notes">الملاحظات</option>
-                        <option value="documents">الوثائق</option>
-                    </select>
-                </div>
-            </div>
-            <div class="card" id="advSearchResultsContainer" style="width: 100%;"></div>
-        </div>
+    </div>
 
+    <!-- 🎙️ نافذة تسجيل الملاحظة الصوتية المباشرة -->
+    <div class="voice-modal-overlay" id="voiceModal">
+        <div class="voice-modal">
+            <div class="voice-pulse" id="voicePulseIcon">🎙️</div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px;" id="voiceModalTitle">جاري الاستماع...</h3>
+            <p style="font-size: 13px; color: var(--text-light); margin-bottom: 16px;">تحدث باللغة العربية بوضوح وسيتم تدوين كلامك فوراً</p>
+            <div id="voiceTranscriptText" style="min-height: 80px; max-height: 140px; overflow-y: auto; background: var(--input-bg); padding: 12px; border-radius: 16px; font-size: 15px; font-weight: 600; margin-bottom: 20px; text-align: right; color: var(--text); border: 0.5px solid var(--border);">...</div>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="stopAndSaveVoiceNote()" class="btn-submit" style="background: var(--success); flex: 1; padding: 12px;">✅ حفظ الملاحظة</button>
+                <button onclick="cancelVoiceNote()" class="btn-submit" style="background: var(--input-bg); color: var(--text); flex: 1; padding: 12px;">إلغاء</button>
+            </div>
+        </div>
     </div>
 
     <!-- 🏝️ الكبسولة العائمة الذكية (iOS Floating Island Dock) -->
     <div class="floating-island">
         <button class="island-btn" onclick="toggleMobileMenu()">☰</button>
+        <button class="island-voice-btn" onclick="startVoiceNote()" title="تسجيل ملاحظة صوتية سريعة">🎙️</button>
         <div class="footer-action-wrapper">
             <div class="island-popup-menu" id="footerMenu">
                 <button class="island-item" onclick="handleFooterAction('fixed-bills')">📄 إضافة فاتورة</button>
@@ -715,6 +782,72 @@
             db.expenses = db.expenses.filter(ex => { return ((now - new Date(ex.date)) / (1000 * 60 * 60 * 24)) <= 120; });
             db.todos = db.todos.filter(t => { return ((now - new Date(t.date)) / (1000 * 60 * 60 * 24)) <= 30; });
             localStorage.setItem('myLifeAppDB', JSON.stringify(db));
+        }
+
+        // --- 🎙️ نظام تحويل الصوت إلى نص المصلح بدقة وبدون تكرار ---
+        let recognition = null;
+        let finalVoiceTranscript = '';
+
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'ar-SA';
+
+            // إعادة بناء النص كاملاً من البداية على كل حدث لتجنب التكرار
+            recognition.onresult = (event) => {
+                let fullTranscript = '';
+                for (let i = 0; i < event.results.length; ++i) {
+                    fullTranscript += event.results[i][0].transcript;
+                }
+                finalVoiceTranscript = fullTranscript.trim();
+                document.getElementById('voiceTranscriptText').innerText = finalVoiceTranscript || 'استمع الآن...';
+            };
+
+            recognition.onerror = (event) => {
+                document.getElementById('voiceTranscriptText').innerText = '⚠️ حدث خطأ في التقاط الصوت: ' + event.error;
+            };
+        }
+
+        function startVoiceNote() {
+            if (!recognition) {
+                alert('عذراً، متصفحك لا يدعم تحويل الصوت إلى نص مباشرة. يمكنك كتابة الملاحظة من الإضافة السريعة.');
+                return;
+            }
+            finalVoiceTranscript = '';
+            document.getElementById('voiceTranscriptText').innerText = 'استمع الآن...';
+            document.getElementById('voiceModal').classList.add('active');
+            try {
+                recognition.start();
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        function stopAndSaveVoiceNote() {
+            if (recognition) {
+                try { recognition.stop(); } catch(e){}
+            }
+            document.getElementById('voiceModal').classList.remove('active');
+            const noteContent = document.getElementById('voiceTranscriptText').innerText.trim();
+            if (noteContent && noteContent !== 'استمع الآن...' && !noteContent.startsWith('⚠️')) {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+                db.notes.push({
+                    id: Date.now(),
+                    title: `🎙️ ملاحظة صوتية (${timeStr})`,
+                    body: noteContent
+                });
+                finalizeAction('✅ تم حفظ الملاحظة الصوتية بنجاح!');
+            }
+        }
+
+        function cancelVoiceNote() {
+            if (recognition) {
+                try { recognition.stop(); } catch(e){}
+            }
+            document.getElementById('voiceModal').classList.remove('active');
         }
 
         // --- التصفح والفوتر ---
@@ -1012,18 +1145,18 @@
             const container = document.getElementById('advSearchResultsContainer'); 
             container.innerHTML = '';
             let results = [];
-            if(category === 'all' || category === 'fixed_bills') db.fixed_bills.forEach(i => results.push({...i, _type: 'fixed_bills', _icon: '📄', _title: i.title, _sub1: `المبلغ: ${i.amount}`, _sort: new Date(i.date)}));
-            if(category === 'all' || category === 'subscriptions') db.subscriptions.forEach(i => results.push({...i, _type: 'subscriptions', _icon: '🔁', _title: i.name, _sub1: `المبلغ: ${i.amount}`, _sort: new Date(i.startDate)}));
-            if(category === 'all' || category === 'purchases') db.purchases.forEach(i => results.push({...i, _type: 'purchases', _icon: '🛒', _title: i.name, _sub1: `السعر: ${i.amount}`, _sort: new Date(i.date)}));
+            if(category === 'all' || category === 'fixed_bills') db.fixed_bills.forEach(i => results.push({...i, _type: 'fixed_bills', _icon: '📄', _title: i.title, _sub1: `المبلغ: ${i.amount} ₪`, _sort: new Date(i.date)}));
+            if(category === 'all' || category === 'subscriptions') db.subscriptions.forEach(i => results.push({...i, _type: 'subscriptions', _icon: '🔁', _title: i.name, _sub1: `المبلغ: ${i.amount} ₪`, _sort: new Date(i.startDate)}));
+            if(category === 'all' || category === 'purchases') db.purchases.forEach(i => results.push({...i, _type: 'purchases', _icon: '🛒', _title: i.name, _sub1: `السعر: ${i.amount} ₪`, _sort: new Date(i.date)}));
             if(category === 'all' || category === 'vault') db.vault.forEach(i => results.push({...i, _type: 'vault', _icon: '🔐', _title: i.accountName, _sub1: i.password, _sort: new Date(i.date)}));
             if(category === 'all' || category === 'documents') db.documents.forEach(i => results.push({...i, _type: 'documents', _icon: '🆔', _title: i.name, _sub1: `ينتهي: ${i.expiryDate}`, _sort: new Date(i.expiryDate)}));
-            if(category === 'all' || category === 'notes') db.notes.forEach(i => results.push({...i, _type: 'notes', _icon: '📝', _title: i.title, _sub1: i.body.substring(0,40)+'...', _sort: new Date(i.id)}));
-            if(category === 'all' || category === 'expenses') db.expenses.forEach(i => results.push({...i, _type: 'expenses', _icon: '💸', _title: i.desc, _sub1: `المبلغ: ${i.amount}`, _sort: new Date(i.date)}));
+            if(category === 'all' || category === 'notes') db.notes.forEach(i => results.push({...i, _type: 'notes', _icon: '📝', _title: i.title, _sub1: i.body.substring(0,50)+'...', _sort: new Date(i.id)}));
+            if(category === 'all' || category === 'expenses') db.expenses.forEach(i => results.push({...i, _type: 'expenses', _icon: '💸', _title: i.desc, _sub1: `المبلغ: ${i.amount} ₪`, _sort: new Date(i.date)}));
             
             if(query !== '') results = results.filter(i => (i._title && i._title.toLowerCase().includes(query)) || (i._sub1 && i._sub1.toLowerCase().includes(query)));
             results.sort((a,b) => b._sort - a._sort);
 
-            if(results.length === 0) { container.innerHTML = '<p style="color:var(--text-light); font-weight:500;">لا توجد نتائج مطابقة.</p>'; return; }
+            if(results.length === 0) { container.innerHTML = '<p style="color:var(--text-light); font-weight:500; text-align:center; padding:20px;">لا توجد نتائج مطابقة للبحث.</p>'; return; }
             results.forEach(res => {
                 let passStyle = res._type === 'vault' ? `background:var(--danger); color:white; padding:2px 8px; border-radius:6px; font-family:monospace;` : `color:var(--text-light);`;
                 container.innerHTML += `<div class="list-item" style="background:var(--card-solid); padding:16px; border-radius:16px; margin-bottom:10px; border:0.5px solid var(--border); word-break: break-word;"><div style="flex:1;"><strong>${res._icon} ${res._title}</strong><br><span style="${passStyle} font-size:13px; font-weight:600;">${res._sub1}</span></div><div style="display:flex; gap:8px; flex-shrink:0;"><button onclick="editItem('${res._type}', ${res.id})" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size:16px;">✏️</button><button onclick="deleteItem('${res._type}', ${res.id})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:16px;">🗑</button></div></div>`;
@@ -1051,7 +1184,7 @@
         function exportData() { 
             const dl = document.createElement('a'); 
             dl.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db))); 
-            dl.setAttribute("download", `MyERP_Backup.json`); 
+            dl.setAttribute("download", `LifeOS_Backup.json`); 
             document.body.appendChild(dl); 
             dl.click(); 
             dl.remove(); 
@@ -1089,7 +1222,7 @@
             Notification.requestPermission().then(function (permission) { 
                 if (permission === "granted") { 
                     alert("✅ تم تفعيل الإشعارات بنجاح!"); 
-                    new Notification("Zen OS", { body: "الإشعارات تعمل بشكل ممتاز" }); 
+                    new Notification("Life OS", { body: "الإشعارات تعمل بشكل ممتاز" }); 
                 } else { 
                     alert("❌ تم رفض الصلاحية."); 
                 } 
